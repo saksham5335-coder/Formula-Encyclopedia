@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formula Encyclopedia — Developed by Saksham Sharma</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- KaTeX for fast, mathematical typesetting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Three.js for 3D WebGL Parametric Surfaces -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0f19;
+      color: #f8fafc;
+    }
+
+    .font-mono-code {
+      font-family: 'Fira Code', monospace;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.5);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(56, 189, 248, 0.8);
+    }
+
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .katex-display {
+      margin: 0.5em 0 !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0.25rem 0;
+    }
+
+    .active-tab {
+      background-color: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #38bdf8 !important;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col justify-between selection:bg-sky-500 selection:text-white">
+
+  <!-- Header Section -->
+  <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo & Credit Tag -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('catalog')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 via-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/20 font-bold text-xl">
+          ∑
+        </div>
+        <div>
+          <h1 class="font-extrabold text-lg sm:text-xl tracking-tight text-white leading-tight">Formula Encyclopedia</h1>
+          <p class="text-xs text-amber-400 font-semibold tracking-wide uppercase">Developed by Saksham Sharma</p>
+        </div>
+      </div>
+
+      <!-- Desktop Nav Buttons -->
+      <nav class="hidden md:flex items-center gap-1 bg-slate-900/80 p-1 rounded-xl border border-slate-800">
+        <button id="nav-catalog" onclick="switchTab('catalog')" class="active-tab px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all">
+          <i class="fa-solid fa-book-bookmark mr-1.5"></i> Catalog (42)
+        </button>
+        <button id="nav-lab3d" onclick="switchTab('lab3d')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition-all">
+          <i class="fa-solid fa-cube mr-1.5 text-sky-400"></i> 3D Surface Lab
+        </button>
+        <button id="nav-proofs" onclick="switchTab('proofs')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition-all">
+          <i class="fa-solid fa-graduation-cap mr-1.5 text-indigo-400"></i> Proof Studio
+        </button>
+        <button id="nav-history" onclick="switchTab('history')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition-all">
+          <i class="fa-solid fa-landmark mr-1.5 text-amber-400"></i> History
+        </button>
+      </nav>
+
+      <!-- Action Tools -->
+      <div class="flex items-center gap-2">
+        <button onclick="toggleFavoritesFilter()" id="favToggleBtn" title="View Saved Formulas" class="px-3 py-2 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-300 hover:text-amber-400 hover:border-amber-500/40 transition-all flex items-center gap-2 text-xs font-semibold">
+          <i class="fa-solid fa-bookmark text-amber-400"></i>
+          <span id="favCount">Saved (0)</span>
+        </button>
+
+        <button onclick="openQuizModal()" class="px-3 py-2 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-300 hover:text-sky-400 hover:border-sky-500/40 transition-all flex items-center gap-2 text-xs font-semibold">
+          <i class="fa-solid fa-brain text-sky-400"></i>
+          <span class="hidden sm:inline">Quiz</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Nav Bar -->
+    <div class="flex md:hidden items-center justify-around border-t border-slate-800/60 bg-slate-950/90 py-2 text-xs font-medium">
+      <button onclick="switchTab('catalog')" class="text-sky-400 flex flex-col items-center">
+        <i class="fa-solid fa-book-bookmark text-base"></i> Catalog
+      </button>
+      <button onclick="switchTab('lab3d')" class="text-slate-400 hover:text-sky-400 flex flex-col items-center">
+        <i class="fa-solid fa-cube text-base"></i> 3D Lab
+      </button>
+      <button onclick="switchTab('proofs')" class="text-slate-400 hover:text-indigo-400 flex flex-col items-center">
+        <i class="fa-solid fa-graduation-cap text-base"></i> Proofs
+      </button>
+      <button onclick="switchTab('history')" class="text-slate-400 hover:text-amber-400 flex flex-col items-center">
+        <i class="fa-solid fa-landmark text-base"></i> History
+      </button>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+
+    <!-- ==================== TAB 1: CATALOG ==================== -->
+    <section id="tab-catalog" class="tab-content space-y-6">
+      
+      <!-- Search & Filters -->
+      <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glass-panel p-4 rounded-2xl border border-slate-800">
+        <div class="relative flex-1">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search all 42 formulas, proofs, mathematicians, or domains..." 
+            oninput="handleSearch(this.value)"
+            class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700/60 text-slate-100 text-sm focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all placeholder:text-slate-500"
+          >
+          <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+
+        <!-- Domain Category Pills -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none text-xs font-semibold">
+          <button onclick="filterCategory('All')" class="cat-pill active-cat px-3 py-1.5 rounded-xl border bg-sky-600 border-sky-500 text-white whitespace-nowrap transition-all" data-cat="All">All 42</button>
+          <button onclick="filterCategory('Algebra')" class="cat-pill px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white whitespace-nowrap transition-all" data-cat="Algebra">Algebra</button>
+          <button onclick="filterCategory('Geometry')" class="cat-pill px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white whitespace-nowrap transition-all" data-cat="Geometry">Geometry</button>
+          <button onclick="filterCategory('Trigonometry')" class="cat-pill px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white whitespace-nowrap transition-all" data-cat="Trigonometry">Trigonometry</button>
+          <button onclick="filterCategory('Calculus')" class="cat-pill px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white whitespace-nowrap transition-all" data-cat="Calculus">Calculus</button>
+          <button onclick="filterCategory('Linear Algebra')" class="cat-pill px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white whitespace-nowrap transition-all" data-cat="Linear Algebra">Linear Algebra</button>
+          <button onclick="filterCategory('Probability & Statistics')" class="cat-pill px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white whitespace-nowrap transition-all" data-cat="Probability & Statistics">Probability</button>
+          <button onclick="filterCategory('Physics')" class="cat-pill px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white whitespace-nowrap transition-all" data-cat="Physics">Physics</button>
+        </div>
+      </div>
+
+      <!-- Formulas Grid -->
+      <div id="catalogGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- 42 Formula cards populated via JS -->
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: 3D SURFACE LAB ==================== -->
+    <section id="tab-lab3d" class="tab-content hidden space-y-6">
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+          <div>
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-cube text-sky-400"></i> Interactive 3D Parametric WebGL Surface Generator
+            </h2>
+            <p class="text-xs text-slate-400">Rotate, zoom, and adjust parameters to visualize 3D surfaces of formulas.</p>
+          </div>
+
+          <!-- Surface Mesh Preset Selection -->
+          <div class="flex items-center gap-3">
+            <label class="text-xs text-slate-300 font-semibold">Select 3D Preset:</label>
+            <select id="surfaceSelect" onchange="render3DSurface()" class="px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-xs font-semibold focus:outline-none focus:border-sky-500">
+              <option value="gaussian">3D Gaussian Bell Surface</option>
+              <option value="saddle">Hyperbolic Paraboloid (Saddle)</option>
+              <option value="wave">2D Quantum Wave Interference</option>
+              <option value="blackhole">Schwarzschild Spacetime Well</option>
+              <option value="torus">Riemannian 3D Torus Surface</option>
+              <option value="mobius">3D Mobius Strip Topological Topology</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- WebGL Viewport Container -->
+        <div class="w-full h-[520px] rounded-2xl bg-black/90 border border-slate-800 relative overflow-hidden group">
+          <canvas id="webgl-canvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+          
+          <div class="absolute bottom-4 left-4 bg-slate-900/85 backdrop-blur-md border border-slate-800 p-3.5 rounded-xl text-xs space-y-2 text-slate-300 max-w-sm">
+            <div id="visModelTitle" class="font-bold text-sky-400">Gaussian Surface Model</div>
+            <div id="visModelEq" class="font-mono-code text-[11px] text-amber-300">z = A * exp(-k*(x² + y²))</div>
+            <div class="text-[11px] text-slate-400">Click & drag mouse to rotate camera. Scroll wheel to zoom.</div>
+          </div>
+
+          <div class="absolute top-4 right-4 flex items-center gap-2">
+            <button onclick="toggleWireframe3D()" class="px-3 py-1.5 rounded-lg bg-slate-900/80 border border-slate-700 text-slate-200 text-xs font-semibold hover:bg-slate-800">
+              <i class="fa-solid fa-border-all mr-1 text-sky-400"></i> Wireframe
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: PROOF STUDIO ==================== -->
+    <section id="tab-proofs" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Formula Picker Sidebar -->
+        <div class="lg:col-span-4 glass-panel p-4 rounded-2xl border border-slate-800 space-y-3">
+          <h3 class="font-bold text-sm text-slate-200 flex items-center justify-between">
+            <span>Select Formula for Proof</span>
+            <span class="text-xs font-mono-code text-sky-400">42 Available</span>
+          </h3>
+          <div id="proofListSidebar" class="space-y-1.5 max-h-[600px] overflow-y-auto pr-1 text-xs">
+            <!-- Sidebar list populated via JS -->
+          </div>
+        </div>
+
+        <!-- Proof Step-by-Step Viewer -->
+        <div class="lg:col-span-8 glass-panel p-6 rounded-2xl border border-slate-800" id="proofViewer">
+          <!-- Active proof content injected via JS -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: HISTORICAL TIMELINE ==================== -->
+    <section id="tab-history" class="tab-content hidden space-y-6">
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800">
+        <div class="mb-6">
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-landmark text-amber-400"></i> 2,500-Year Historical Discovery Timeline
+          </h2>
+          <p class="text-xs text-slate-400">Chronological history tracing humanity's discoveries from Pythagoras & Euclid to Newton, Euler, Gauss, Einstein, and de Broglie.</p>
+        </div>
+
+        <div id="timelineContainer" class="relative border-l-2 border-slate-800 pl-6 ml-4 space-y-8">
+          <!-- Timeline entries populated via JS -->
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Quiz Modal -->
+  <div id="quizModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl max-w-lg w-full p-6 border border-slate-800 shadow-2xl relative">
+      <button onclick="closeQuizModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold">
+          <i class="fa-solid fa-brain"></i>
+        </div>
+        <div>
+          <h2 class="font-bold text-lg text-white">Formula Mastery Quiz</h2>
+          <p class="text-xs text-slate-400">Test your mastery across all 42 mathematical theorems</p>
+        </div>
+      </div>
+
+      <div id="quizContent" class="space-y-4 my-4">
+        <!-- Dynamic Quiz Question -->
+      </div>
+
+      <div class="flex justify-between items-center pt-4 border-t border-slate-800 text-xs">
+        <span id="quizScoreText" class="text-slate-400 font-medium">Score: 0 / 0</span>
+        <button onclick="generateNextQuizQuestion()" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold transition-all">
+          Next Question <i class="fa-solid fa-arrow-right ml-1"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 border border-slate-700 text-slate-100 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-xs font-semibold">
+    <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
+    <span id="toastMsg">Action completed</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 py-6 text-center text-xs text-slate-500 bg-slate-950">
+    <p><strong>Formula Encyclopedia</strong> — Comprehensive Mathematical Theorem & Visual WebGL Studio</p>
+    <p class="mt-1 text-amber-400/90 font-semibold">Designed & Developed by Saksham Sharma</p>
+  </footer>
+
+  <script>
+    // MASTER DATABASE: EXACTLY 42 FORMULAS WITH PROOFS, HISTORY, AND 3D VISUALS
+    const FORMULAS_42 = [
+      // --- ALGEBRA (1-7) ---
+      {
+        id: "quadratic-formula",
+        title: "Quadratic Equation Formula",
+        category: "Algebra",
+        latex: "x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}",
+        summary: "Yields explicit real or complex roots for second-degree polynomial equations $ax^2 + bx + c = 0$.",
+        author: "Brahmagupta & Al-Khwarizmi",
+        year: "c. 628–820 CE",
+        history: "Systematized in Brahmagupta's Brahmasphutasiddhanta (628 CE) and expanded in Al-Khwarizmi's foundational algebra treatise Al-Jabr (820 CE).",
+        type3D: "saddle",
+        proof: [
+          "Start with general polynomial equation: $$ax^2 + bx + c = 0 \\quad (a \\neq 0)$$",
+          "Divide all terms by $a$: $$x^2 + \\frac{b}{a}x + \\frac{c}{a} = 0$$",
+          "Isolate variable terms by subtracting $\\frac{c}{a}$: $$x^2 + \\frac{b}{a}x = -\\frac{c}{a}$$",
+          "Complete the square by adding $\\left(\\frac{b}{2a}\\right)^2$ to both sides: $$x^2 + \\frac{b}{a}x + \\left(\\frac{b}{2a}\\right)^2 = \\frac{b^2}{4a^2} - \\frac{c}{a}$$",
+          "Express the left-hand side as a binomial square: $$\\left(x + \\frac{b}{2a}\\right)^2 = \\frac{b^2 - 4ac}{4a^2}$$",
+          "Take the square root of both sides: $$x + \\frac{b}{2a} = \\pm \\frac{\\sqrt{b^2 - 4ac}}{2a}$$",
+          "Subtract $\\frac{b}{2a}$ to obtain final formula: $$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$"
+        ]
+      },
+      {
+        id: "arithmetic-series",
+        title: "Sum of Arithmetic Progression",
+        category: "Algebra",
+        latex: "S_n = \\frac{n}{2}\\left(2a + (n-1)d\\right)",
+        summary: "Calculates the total sum of the first $n$ terms in an arithmetic sequence with initial term $a$ and common difference $d$.",
+        author: "Carl Friedrich Gauss",
+        year: "c. 1787 CE",
+        history: "Legend recounts young Gauss quickly summing 1 to 100 in school by pairing terms from opposite ends.",
+        type3D: "gaussian",
+        proof: [
+          "Write sum $S_n$ in forward order: $$S_n = a + (a+d) + (a+2d) + \\dots + (a+(n-1)d)$$",
+          "Write the same sum $S_n$ in reverse order: $$S_n = (a+(n-1)d) + (a+(n-2)d) + \\dots + a$$",
+          "Add both equations term-by-term vertically: $$2S_n = [2a + (n-1)d] + [2a + (n-1)d] + \\dots + [2a + (n-1)d]$$",
+          "Since there are $n$ identical terms: $$2S_n = n \\left(2a + (n-1)d\\right)$$",
+          "Divide by $2$: $$S_n = \\frac{n}{2}\\left(2a + (n-1)d\\right)$$"
+        ]
+      },
+      {
+        id: "geometric-series",
+        title: "Sum of Infinite Geometric Series",
+        category: "Algebra",
+        latex: "S_\\infty = \\frac{a}{1 - r} \\quad (|r| < 1)",
+        summary: "Evaluates the infinite sum of terms where each term is multiplied by a common ratio $r$.",
+        author: "Archimedes of Syracuse",
+        year: "c. 250 BCE",
+        history: "Used by Archimedes in 'The Quadrature of the Parabola' to calculate parabolic segment area via infinite exhaustion.",
+        type3D: "wave",
+        proof: [
+          "Let $S_n = a + ar + ar^2 + \\dots + ar^{n-1}$.",
+          "Multiply $S_n$ by $r$: $$r S_n = ar + ar^2 + ar^3 + \\dots + ar^n$$",
+          "Subtract $r S_n$ from $S_n$: $$S_n - r S_n = a - ar^n$$",
+          "Factor out $S_n$: $$S_n (1 - r) = a (1 - r^n) \\implies S_n = \\frac{a(1 - r^n)}{1 - r}$$",
+          "Take limit as $n \\to \\infty$ with $|r| < 1$: Since $\\lim_{n \\to \\infty} r^n = 0$, we get $S_\\infty = \\frac{a}{1 - r}$."
+        ]
+      },
+      {
+        id: "binomial-theorem",
+        title: "Binomial Expansion Theorem",
+        category: "Algebra",
+        latex: "(x + y)^n = \\sum_{k=0}^n \\binom{n}{k} x^{n-k} y^k",
+        summary: "Expands powers of a binomial $(x+y)^n$ using combinatorial coefficients $\\binom{n}{k} = \\frac{n!}{k!(n-k)!}$.",
+        author: "Blaise Pascal & Isaac Newton",
+        year: "1665 CE",
+        history: "Newton generalized Pascal's triangle coefficients to fractional and negative powers.",
+        type3D: "gaussian",
+        proof: [
+          "Proof by Mathematical Induction on $n$.",
+          "Base Case $n=1$: $(x+y)^1 = \\binom{1}{0}x^1 y^0 + \\binom{1}{1}x^0 y^1 = x + y$. True.",
+          "Inductive Hypothesis: Assume statement holds for $n = m$.",
+          "For $n = m+1$: $(x+y)^{m+1} = (x+y) \\sum_{k=0}^m \\binom{m}{k} x^{m-k} y^k$.",
+          "Expanding and applying Pascal's Identity $\\binom{m}{k-1} + \\binom{m}{k} = \\binom{m+1}{k}$ yields $\\sum_{k=0}^{m+1} \\binom{m+1}{k} x^{m+1-k} y^k$."
+        ]
+      },
+      {
+        id: "difference-of-cubes",
+        title: "Difference of Cubes Identity",
+        category: "Algebra",
+        latex: "a^3 - b^3 = (a - b)(a^2 + ab + b^2)",
+        summary: "Factors the difference between two cubic terms into a linear and quadratic polynomial product.",
+        author: "Euclid of Alexandria",
+        year: "c. 300 BCE",
+        history: "Formulated geometrically in Euclid's Elements, Book II.",
+        type3D: "saddle",
+        proof: [
+          "Start with right-hand side expansion: $$(a - b)(a^2 + ab + b^2)$$",
+          "Distribute $a$ across the quadratic polynomial: $$a(a^2 + ab + b^2) = a^3 + a^2 b + ab^2$$",
+          "Distribute $-b$ across the polynomial: $$-b(a^2 + ab + b^2) = -a^2 b - ab^2 - b^3$$",
+          "Combine terms: $$(a^3 + a^2 b + ab^2) + (-a^2 b - ab^2 - b^3) = a^3 - b^3$$"
+        ]
+      },
+      {
+        id: "am-gm-inequality",
+        title: "AM-GM Inequality",
+        category: "Algebra",
+        latex: "\\frac{a_1 + a_2 + \\dots + a_n}{n} \\ge \\sqrt[n]{a_1 a_2 \\dots a_n}",
+        summary: "Proves that the Arithmetic Mean of non-negative real numbers is always greater than or equal to their Geometric Mean.",
+        author: "Augustin-Louis Cauchy",
+        year: "1821 CE",
+        history: "Cauchy published his famous backward induction proof in Cours d'Analyse.",
+        type3D: "gaussian",
+        proof: [
+          "For $n=2$: $(\\sqrt{a_1} - \\sqrt{a_2})^2 \\ge 0 \\implies a_1 - 2\\sqrt{a_1 a_2} + a_2 \\ge 0 \\implies \\frac{a_1+a_2}{2} \\ge \\sqrt{a_1 a_2}$.",
+          "Induction step: Prove true for $n = 2^k$ by applying $n=2$ recursively.",
+          "Backward Induction: If true for $n$, prove true for $n-1$ by setting $a_n = A_{n-1}$.",
+          "Thus the inequality holds for all integers $n \\ge 1$."
+        ]
+      },
+      {
+        id: "euler-totient",
+        title: "Euler's Totient Product Formula",
+        category: "Algebra",
+        latex: "\\phi(n) = n \\prod_{p | n} \\left(1 - \\frac{1}{p}\\right)",
+        summary: "Counts integers up to $n$ that are coprime to $n$ using prime factorization.",
+        author: "Leonhard Euler",
+        year: "1736 CE",
+        history: "Central to Euler's generalization of Fermat's Little Theorem and modern RSA encryption.",
+        type3D: "torus",
+        proof: [
+          "By Fundamental Theorem of Arithmetic, $n = p_1^{k_1} p_2^{k_2} \\dots p_m^{k_m}$.",
+          "For a prime power $p^k$, non-coprime numbers are multiples of $p$, count = $p^{k-1}$.",
+          "So $\\phi(p^k) = p^k - p^{k-1} = p^k \\left(1 - \\frac{1}{p}\\right)$.",
+          "Since $\\phi$ is multiplicative, $\\phi(n) = \\prod \\phi(p_i^{k_i}) = n \\prod_{p|n} \\left(1 - \\frac{1}{p}\\right)$."
+        ]
+      },
+
+      // --- GEOMETRY & TOPOLOGY (8-14) ---
+      {
+        id: "pythagoras",
+        title: "Pythagorean Theorem",
+        category: "Geometry",
+        latex: "a^2 + b^2 = c^2",
+        summary: "Fundamental geometric relation among the three sides of a right triangle.",
+        author: "Pythagoras of Samos",
+        year: "c. 530 BCE",
+        history: "Recorded in Euclid's Elements (Book I, Proposition 47) and ancient Chinese Chou Pei Suan Ching.",
+        type3D: "saddle",
+        proof: [
+          "Construct a outer square with side length $(a+b)$.",
+          "Inscribe four identical right triangles with legs $a, b$ and hypotenuse $c$.",
+          "Inner unshaded region forms a square with side $c$ and area $c^2$.",
+          "Total outer area: $$(a+b)^2 = 4 \\cdot \\left(\\frac{1}{2}ab\\right) + c^2$$",
+          "Expand left side: $$a^2 + 2ab + b^2 = 2ab + c^2 \\implies a^2 + b^2 = c^2$$"
+        ]
+      },
+      {
+        id: "area-circle",
+        title: "Area of a Circle",
+        category: "Geometry",
+        latex: "A = \\pi r^2",
+        summary: "Calculates the total enclosed surface area inside a circle of radius $r$.",
+        author: "Archimedes of Syracuse",
+        year: "c. 225 BCE",
+        history: "Proved in 'Measurement of a Circle' using method of exhaustion with inscribed 96-gon polygons.",
+        type3D: "torus",
+        proof: [
+          "Divide circle of radius $r$ into $N$ equal sector wedges.",
+          "Rearrange wedges side-by-side to approximate a parallelogram.",
+          "Base of parallelogram approaches half circumference: $b = \\frac{1}{2}(2\\pi r) = \\pi r$.",
+          "Height of parallelogram approaches radius: $h = r$.",
+          "Area = $b \\cdot h = (\\pi r)(r) = \\pi r^2$ as $N \\to \\infty$."
+        ]
+      },
+      {
+        id: "sphere-volume",
+        title: "Volume of a Sphere",
+        category: "Geometry",
+        latex: "V = \\frac{4}{3}\\pi r^3",
+        summary: "Computes three-dimensional volume enclosed by a spherical surface of radius $r$.",
+        author: "Archimedes of Syracuse",
+        year: "c. 225 BCE",
+        history: "Archimedes requested a sphere inside a cylinder carved onto his tombstone to mark this discovery.",
+        type3D: "gaussian",
+        proof: [
+          "Use Cavalieri's Principle comparing a hemisphere of radius $r$ and a cylinder minus a cone.",
+          "At height $h$, cross-sectional area of hemisphere = $\\pi (r^2 - h^2)$.",
+          "Cross-sectional area of cylinder ($r$) minus cone ($r$) = $\\pi r^2 - \\pi h^2 = \\pi (r^2 - h^2)$.",
+          "Equal cross-sections imply equal volumes: $V_{hemi} = V_{cyl} - V_{cone} = \\pi r^3 - \\frac{1}{3}\\pi r^3 = \\frac{2}{3}\\pi r^3$.",
+          "Full sphere volume $V = 2 V_{hemi} = \\frac{4}{3}\\pi r^3$."
+        ]
+      },
+      {
+        id: "sphere-surface",
+        title: "Surface Area of a Sphere",
+        category: "Geometry",
+        latex: "A = 4\\pi r^2",
+        summary: "States that spherical surface area equals four times the area of its great circle.",
+        author: "Archimedes of Syracuse",
+        year: "c. 225 BCE",
+        history: "Discovered alongside the volume formula in 'On the Sphere and Cylinder'.",
+        type3D: "gaussian",
+        proof: [
+          "Differentiate sphere volume $V(r) = \\frac{4}{3}\\pi r^3$ with respect to radius $r$.",
+          "Surface area $A = \\frac{dV}{dr} = \\frac{d}{dr}\\left(\\frac{4}{3}\\pi r^3\\right)$.",
+          "Applying power rule: $$A = 4\\pi r^2$$"
+        ]
+      },
+      {
+        id: "heron-formula",
+        title: "Heron's Formula for Triangle Area",
+        category: "Geometry",
+        latex: "A = \\sqrt{s(s-a)(s-b)(s-c)}",
+        summary: "Calculates triangle area from side lengths $a, b, c$ where semi-perimeter $s = \\frac{a+b+c}{2}$.",
+        author: "Heron of Alexandria",
+        year: "c. 60 CE",
+        history: "Published in Heron's Metrica, providing geometric area calculation without angle measurements.",
+        type3D: "saddle",
+        proof: [
+          "Let triangle have height $h$ on side $c$, split into $x$ and $c-x$.",
+          "$h^2 = a^2 - x^2 = b^2 - (c-x)^2 \\implies x = \\frac{a^2 + c^2 - b^2}{2c}$.",
+          "Area $A = \\frac{1}{2}c h = \\frac{1}{2}c \\sqrt{a^2 - x^2}$.",
+          "Substituting $x$ and factoring terms using difference of squares yields $A = \\sqrt{s(s-a)(s-b)(s-c)}$."
+        ]
+      },
+      {
+        id: "euler-polyhedron",
+        title: "Euler's Polyhedral Formula",
+        category: "Geometry",
+        latex: "V - E + F = 2",
+        summary: "Topological invariant relating Vertices, Edges, and Faces of convex 3D polyhedra.",
+        author: "Leonhard Euler",
+        year: "1758 CE",
+        history: "Marked the historical birth of topology and graph theory.",
+        type3D: "mobius",
+        proof: [
+          "Project polyhedral surface onto a plane graph after removing one face ($F_{plane} = F - 1$).",
+          "Triangulate faces by adding edges: adding an edge increases both $E$ and $F$ by 1, preserving $V - E + F$.",
+          "Remove outer boundary triangles step-by-step: each removal preserves $V - E + F = 1$.",
+          "Adding back the original removed face yields $V - E + F = 2$."
+        ]
+      },
+      {
+        id: "distance-3d",
+        title: "3D Euclidean Distance Formula",
+        category: "Geometry",
+        latex: "d = \\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2 + (z_2-z_1)^2}",
+        summary: "Measures straight-line distance between points in three-dimensional space.",
+        author: "René Descartes",
+        year: "1637 CE",
+        history: "Formulated in 'La Géométrie', unifying algebra and Euclidean geometry.",
+        type3D: "saddle",
+        proof: [
+          "In $xy$-plane, distance squared between $(x_1,y_1)$ and $(x_2,y_2)$ is $d_{xy}^2 = (x_2-x_1)^2 + (y_2-y_1)^2$.",
+          "Form right triangle with leg $d_{xy}$ and vertical leg $\\Delta z = z_2 - z_1$.",
+          "Hypotenuse $d^2 = d_{xy}^2 + (z_2-z_1)^2$.",
+          "Substitute $d_{xy}^2$: $$d = \\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2 + (z_2-z_1)^2}$$"
+        ]
+      },
+
+      // --- TRIGONOMETRY (15-20) ---
+      {
+        id: "trig-pythagoras",
+        title: "Pythagorean Trigonometric Identity",
+        category: "Trigonometry",
+        latex: "\\sin^2\\theta + \\cos^2\\theta = 1",
+        summary: "Fundamental trigonometric identity derived from the unit circle definition.",
+        author: "Hipparchus of Nicaea",
+        year: "c. 150 BCE",
+        history: "Hipparchus constructed the first trigonometric chord tables in Ancient Greece.",
+        type3D: "wave",
+        proof: [
+          "On unit circle centered at origin with radius $r = 1$, any point $P(\\theta) = (x, y) = (\\cos\\theta, \\sin\\theta)$.",
+          "Apply Pythagorean Theorem to right triangle formed by coordinates: $$x^2 + y^2 = r^2$$",
+          "Substitute $x = \\cos\\theta$, $y = \\sin\\theta$, and $r = 1$: $$\\cos^2\\theta + \\sin^2\\theta = 1$$"
+        ]
+      },
+      {
+        id: "sine-addition",
+        title: "Sine Angle Addition Formula",
+        category: "Trigonometry",
+        latex: "\\sin(\\alpha + \\beta) = \\sin\\alpha\\cos\\beta + \\cos\\alpha\\sin\\beta",
+        summary: "Expresses sine of a composite angle in terms of component sines and cosines.",
+        author: "Claudius Ptolemy",
+        year: "c. 150 CE",
+        history: "Published in Ptolemy's Almagest as the Chord Addition Theorem.",
+        type3D: "wave",
+        proof: [
+          "Apply Euler's formula $e^{i(\\alpha+\\beta)} = \\cos(\\alpha+\\beta) + i\\sin(\\alpha+\\beta)$.",
+          "Also $e^{i(\\alpha+\\beta)} = e^{i\\alpha} e^{i\\beta} = (\\cos\\alpha + i\\sin\\alpha)(\\cos\\beta + i\\sin\\beta)$.",
+          "Multiply binomials: $(\\cos\\alpha\\cos\\beta - \\sin\\alpha\\sin\\beta) + i(\\sin\\alpha\\cos\\beta + \\cos\\alpha\\sin\\beta)$.",
+          "Equating imaginary parts yields: $$\\sin(\\alpha+\\beta) = \\sin\\alpha\\cos\\beta + \\cos\\alpha\\sin\\beta$$"
+        ]
+      },
+      {
+        id: "law-of-sines",
+        title: "Law of Sines",
+        category: "Trigonometry",
+        latex: "\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C} = 2R",
+        summary: "Relates side lengths of any plane triangle to the sines of its angles and circumradius $R$.",
+        author: "Nasir al-Din al-Tusi",
+        year: "c. 1250 CE",
+        history: "Al-Tusi treated trigonometry as an independent mathematical discipline separate from astronomy.",
+        type3D: "torus",
+        proof: [
+          "In triangle $ABC$, drop altitude $h$ from $C$ to side $c$.",
+          "$h = b \\sin A$ and $h = a \\sin B \\implies b \\sin A = a \\sin B$.",
+          "Divide by $\\sin A \\sin B$: $$\\frac{a}{\\sin A} = \\frac{b}{\\sin B}$$",
+          "Repeating for altitude to side $a$ yields $\\frac{b}{\\sin B} = \\frac{c}{\\sin C}$."
+        ]
+      },
+      {
+        id: "law-of-cosines",
+        title: "Law of Cosines",
+        category: "Trigonometry",
+        latex: "c^2 = a^2 + b^2 - 2ab\\cos C",
+        summary: "Generalizes Pythagorean theorem to arbitrary non-right triangles.",
+        author: "Ghiyath al-Kashi",
+        year: "1424 CE",
+        history: "Published in Al-Kashi's 'Key to Arithmetic', known in France as Théorème d'Al-Kashi.",
+        type3D: "saddle",
+        proof: [
+          "Place angle $C$ at origin in Cartesian plane with side $b$ along $x$-axis.",
+          "Vertex $A = (b, 0)$ and Vertex $B = (a\\cos C, a\\sin C)$.",
+          "Distance squared $c^2 = (a\\cos C - b)^2 + (a\\sin C - 0)^2$.",
+          "Expand: $a^2\\cos^2 C - 2ab\\cos C + b^2 + a^2\\sin^2 C$.",
+          "Use $\\cos^2 C + \\sin^2 C = 1$: $$c^2 = a^2 + b^2 - 2ab\\cos C$$"
+        ]
+      },
+      {
+        id: "euler-formula",
+        title: "Euler's Formula in Complex Analysis",
+        category: "Trigonometry",
+        latex: "e^{i\\theta} = \\cos\\theta + i\\sin\\theta",
+        summary: "Establishes fundamental equivalence between complex exponentials and trigonometric functions.",
+        author: "Leonhard Euler",
+        year: "1748 CE",
+        history: "Published in 'Introductio in analysin infinitorum', forming complex analysis.",
+        type3D: "wave",
+        proof: [
+          "Recall Taylor expansion for $e^x = \\sum_{n=0}^\\infty \\frac{x^n}{n!}$.",
+          "Substitute $x = i\\theta$: $$e^{i\\theta} = 1 + i\\theta - \\frac{\\theta^2}{2!} - \\frac{i\\theta^3}{3!} + \\frac{\\theta^4}{4!} + \\dots$$",
+          "Group real and imaginary terms separately:",
+          "Real: $\\left(1 - \\frac{\\theta^2}{2!} + \\frac{\\theta^4}{4!} - \\dots\\right) = \\cos\\theta$.",
+          "Imaginary: $i \\left(\\theta - \\frac{\\theta^3}{3!} + \\frac{\\theta^5}{5!} - \\dots\\right) = i\\sin\\theta$.",
+          "Therefore $e^{i\\theta} = \\cos\\theta + i\\sin\\theta$."
+        ]
+      },
+      {
+        id: "euler-identity",
+        title: "Euler's Identity",
+        category: "Trigonometry",
+        latex: "e^{i\\pi} + 1 = 0",
+        summary: "Unifies five fundamental mathematical constants ($e, i, \\pi, 1, 0$) in a single relation.",
+        author: "Leonhard Euler",
+        year: "1748 CE",
+        history: "Often voted by mathematicians as the most elegant equation in all of mathematics.",
+        type3D: "wave",
+        proof: [
+          "Start with Euler's Formula: $$e^{i\\theta} = \\cos\\theta + i\\sin\\theta$$",
+          "Substitute $\\theta = \\pi$ radians:",
+          "$$e^{i\\pi} = \\cos(\\pi) + i\\sin(\\pi)$$",
+          "Since $\\cos(\\pi) = -1$ and $\\sin(\\pi) = 0$: $$e^{i\\pi} = -1 + i(0) = -1$$",
+          "Add $1$ to both sides: $$e^{i\\pi} + 1 = 0$$"
+        ]
+      },
+
+      // --- CALCULUS & ANALYSIS (21-28) ---
+      {
+        id: "derivative-sine",
+        title: "Derivative of Sine Function",
+        category: "Calculus",
+        latex: "\\frac{d}{dx} \\sin x = \\cos x",
+        summary: "Establishes that rate of change of sine function equals cosine function.",
+        author: "Isaac Newton & Gottfried Leibniz",
+        year: "c. 1684 CE",
+        history: "Foundational derivative rule establishing differential calculus.",
+        type3D: "wave",
+        proof: [
+          "Limit definition: $$\\frac{d}{dx}\\sin x = \\lim_{h \\to 0} \\frac{\\sin(x+h) - \\sin x}{h}$$",
+          "Expand $\\sin(x+h) = \\sin x \\cos h + \\cos x \\sin h$.",
+          "$$= \\lim_{h \\to 0} \\left[ \\sin x \\left(\\frac{\\cos h - 1}{h}\\right) + \\cos x \\left(\\frac{\\sin h}{h}\\right) \\right]$$",
+          "Limits as $h \\to 0$: $\\lim \\frac{\\sin h}{h} = 1$ and $\\lim \\frac{\\cos h - 1}{h} = 0$.",
+          "$$= \\sin x (0) + \\cos x (1) = \\cos x$$"
+        ]
+      },
+      {
+        id: "product-rule",
+        title: "Product Rule of Differentiation",
+        category: "Calculus",
+        latex: "\\frac{d}{dx}(uv) = u\\frac{dv}{dx} + v\\frac{du}{dx}",
+        summary: "Calculates derivative of product of two differentiable functions $u(x)$ and $v(x)$.",
+        author: "Gottfried Wilhelm Leibniz",
+        year: "1684 CE",
+        history: "Published in Leibniz's first paper on calculus in Acta Eruditorum.",
+        type3D: "saddle",
+        proof: [
+          "Apply derivative limit definition: $$\\frac{d}{dx}(uv) = \\lim_{h \\to 0} \\frac{u(x+h)v(x+h) - u(x)v(x)}{h}$$",
+          "Add and subtract $u(x+h)v(x)$ in numerator:",
+          "$$= \\lim_{h \\to 0} \\frac{u(x+h)v(x+h) - u(x+h)v(x) + u(x+h)v(x) - u(x)v(x)}{h}$$",
+          "Factor terms: $$= \\lim_{h \\to 0} u(x+h) \\frac{v(x+h)-v(x)}{h} + v(x) \\frac{u(x+h)-u(x)}{h}$$",
+          "Taking limit yields $u(x) v'(x) + v(x) u'(x)$."
+        ]
+      },
+      {
+        id: "ftc-1",
+        title: "Fundamental Theorem of Calculus",
+        category: "Calculus",
+        latex: "\\frac{d}{dx} \\int_{a}^{x} f(t)\\,dt = f(x)",
+        summary: "Connects differentiation and integration as inverse mathematical operations.",
+        author: "Isaac Newton & Gottfried Leibniz",
+        year: "c. 1670 CE",
+        history: "Unified geometric area computation with fluxional rate of change.",
+        type3D: "gaussian",
+        proof: [
+          "Let $g(x) = \\int_a^x f(t)dt$.",
+          "$g'(x) = \\lim_{h \\to 0} \\frac{g(x+h) - g(x)}{h} = \\lim_{h \\to 0} \\frac{1}{h} \\int_x^{x+h} f(t)dt$.",
+          "By Mean Value Theorem for Definite Integrals, $\\int_x^{x+h} f(t)dt = f(c) \\cdot h$ for $c \\in [x, x+h]$.",
+          "Substitute: $g'(x) = \\lim_{h \\to 0} \\frac{f(c) \\cdot h}{h} = \\lim_{h \\to 0} f(c)$.",
+          "As $h \\to 0$, $c \\to x$, so $g'(x) = f(x)$."
+        ]
+      },
+      {
+        id: "integration-by-parts",
+        title: "Integration by Parts Formula",
+        category: "Calculus",
+        latex: "\\int u\\,dv = uv - \\int v\\,du",
+        summary: "Transforms integral of product of functions into a simpler integral.",
+        author: "Brook Taylor",
+        year: "1715 CE",
+        history: "Derived by integrating Leibniz's product rule.",
+        type3D: "saddle",
+        proof: [
+          "Start with Product Rule: $$\\frac{d}{dx}(uv) = u \\frac{dv}{dx} + v \\frac{du}{dx}$$",
+          "Integrate both sides with respect to $x$:",
+          "$$\\int \\frac{d}{dx}(uv)\\,dx = \\int u\\,dv + \\int v\\,du$$",
+          "Left side evaluates to $uv$: $$uv = \\int u\\,dv + \\int v\\,du$$",
+          "Rearranging yields: $$\\int u\\,dv = uv - \\int v\\,du$$"
+        ]
+      },
+      {
+        id: "taylor-series",
+        title: "Taylor Series Expansion",
+        category: "Calculus",
+        latex: "f(x) = \\sum_{n=0}^{\\infty} \\frac{f^{(n)}(a)}{n!}(x-a)^n",
+        summary: "Represents infinitely differentiable function as infinite sum of power series terms.",
+        author: "Brook Taylor & Colin Maclaurin",
+        year: "1715 CE",
+        history: "Published in Taylor's 'Methodus Incrementorum Directa et Inversa'.",
+        type3D: "wave",
+        proof: [
+          "Assume $f(x) = c_0 + c_1(x-a) + c_2(x-a)^2 + c_3(x-a)^3 + \\dots$",
+          "Evaluate $f(a) = c_0$.",
+          "Differentiate once: $f'(x) = c_1 + 2c_2(x-a) + 3c_3(x-a)^2 + \\dots \\implies f'(a) = c_1$.",
+          "Differentiate $k$ times: $f^{(k)}(x) = k! c_k + O(x-a) \\implies c_k = \\frac{f^{(k)}(a)}{k!}$.",
+          "Substitute $c_k$ back into polynomial series."
+        ]
+      },
+      {
+        id: "gaussian-integral",
+        title: "Gaussian Definite Integral",
+        category: "Calculus",
+        latex: "\\int_{-\\infty}^{\\infty} e^{-x^2}\\,dx = \\sqrt{\\pi}",
+        summary: "Computes total area under normal distribution curve across real line.",
+        author: "Carl Friedrich Gauss",
+        year: "1809 CE",
+        history: "Essential in normal probability curves and quantum wave functions.",
+        type3D: "gaussian",
+        proof: [
+          "Let $I = \\int_{-\\infty}^{\\infty} e^{-x^2}dx$.",
+          "Consider $I^2 = \\left(\\int_{-\\infty}^\\infty e^{-x^2}dx\\right)\\left(\\int_{-\\infty}^\\infty e^{-y^2}dy\\right) = \\int_{-\\infty}^\\infty \\int_{-\\infty}^\\infty e^{-(x^2+y^2)}dxdy$.",
+          "Switch to polar coordinates $(r, \\theta)$: $x^2+y^2 = r^2$ and $dxdy = r dr d\\theta$.",
+          "$$I^2 = \\int_0^{2\\pi} d\\theta \\int_0^\\infty r e^{-r^2} dr = (2\\pi) \\left[ -\\frac{1}{2}e^{-r^2} \\right]_0^\\infty = 2\\pi \\left(0 - \\left(-\\frac{1}{2}\\right)\\right) = \\pi$$",
+          "Taking square root gives $I = \\sqrt{\\pi}$."
+        ]
+      },
+      {
+        id: "stirling-approximation",
+        title: "Stirling's Approximation for Factorials",
+        category: "Calculus",
+        latex: "\\ln(n!) \\approx n\\ln n - n",
+        summary: "Provides asymptotic estimate for logarithms of factorials for large $n$.",
+        author: "James Stirling",
+        year: "1730 CE",
+        history: "Critical tool in statistical mechanics and information entropy.",
+        type3D: "gaussian",
+        proof: [
+          "Write logarithm of factorial: $\\ln(n!) = \\sum_{k=1}^n \\ln k$.",
+          "Approximate sum using integral bounds: $$\\int_1^n \\ln x \\, dx \\le \\sum_{k=1}^n \\ln k \\le \\int_1^{n+1} \\ln x \\, dx$$",
+          "Integration by parts gives $\\int \\ln x \\, dx = x \\ln x - x$.",
+          "Evaluating at limits yields: $$\\ln(n!) \\approx [x\\ln x - x]_1^n = n\\ln n - n + 1 \\approx n\\ln n - n$$"
+        ]
+      },
+      {
+        id: "fourier-series",
+        title: "Fourier Series Expansion",
+        category: "Calculus",
+        latex: "f(x) = \\frac{a_0}{2} + \\sum_{n=1}^{\\infty} \\left(a_n \\cos(nx) + b_n \\sin(nx)\\right)",
+        summary: "Decomposes periodic functions into sum of sine and cosine harmonics.",
+        author: "Joseph Fourier",
+        year: "1822 CE",
+        history: "Developed in 'Théorie analytique de la chaleur' to solve heat flow equations.",
+        type3D: "wave",
+        proof: [
+          "Use orthogonality of sinusoids: $\\int_{-\\pi}^\\pi \\cos(mx)\\cos(nx)dx = \\pi \\delta_{mn}$.",
+          "Multiply $f(x)$ by $\\cos(mx)$ and integrate over $[-\\pi, \\pi]$.",
+          "Only $n=m$ term survives: $\\int_{-\\pi}^\\pi f(x)\\cos(mx)dx = a_m \\cdot \\pi$.",
+          "Thus $a_n = \\frac{1}{\\pi} \\int_{-\\pi}^\\pi f(x)\\cos(nx)dx$. Similarly $b_n = \\frac{1}{\\pi} \\int_{-\\pi}^\\pi f(x)\\sin(nx)dx$."
+        ]
+      },
+
+      // --- LINEAR ALGEBRA (29-33) ---
+      {
+        id: "dot-product-angle",
+        title: "Vector Dot Product Angle Formula",
+        category: "Linear Algebra",
+        latex: "\\vec{u} \\cdot \\vec{v} = \\|\\vec{u}\\| \\|\\vec{v}\\| \\cos\\theta",
+        summary: "Relates algebraic dot product of vectors to geometric angle $\\theta$ between them.",
+        author: "Josiah Willard Gibbs",
+        year: "1881 CE",
+        history: "Formulated in Gibbs' vector analysis manual for physics.",
+        type3D: "saddle",
+        proof: [
+          "Apply Law of Cosines to triangle formed by vectors $\\vec{u}, \\vec{v}$ and difference $\\vec{w} = \\vec{u} - \\vec{v}$.",
+          "$$\\|\\vec{u} - \\vec{v}\\|^2 = \\|\\vec{u}\\|^2 + \\|\\vec{v}\\|^2 - 2\\|\\vec{u}\\|\\|\\vec{v}\\|\\cos\\theta$$",
+          "Expand left side using dot product: $(\\vec{u}-\\vec{v})\\cdot(\\vec{u}-\\vec{v}) = \\|\\vec{u}\\|^2 - 2(\\vec{u}\\cdot\\vec{v}) + \\|\\vec{v}\\|^2$.",
+          "Equating expressions gives: $$-2(\\vec{u}\\cdot\\vec{v}) = -2\\|\\vec{u}\\|\\|\\vec{v}\\|\\cos\\theta$$",
+          "Cancel $-2$: $$\\vec{u} \\cdot \\vec{v} = \\|\\vec{u}\\| \\|\\vec{v}\\| \\cos\\theta$$"
+        ]
+      },
+      {
+        id: "cross-product-mag",
+        title: "Vector Cross Product Magnitude",
+        category: "Linear Algebra",
+        latex: "\\|\\vec{u} \\times \\vec{v}\\| = \\|\\vec{u}\\| \\|\\vec{v}\\| \\sin\\theta",
+        summary: "Measures area of parallelogram spanned by two 3D vectors.",
+        author: "William Rowan Hamilton",
+        year: "1843 CE",
+        history: "Derived from quaternion vector multiplication rules.",
+        type3D: "saddle",
+        proof: [
+          "Lagrange's Identity: $\\|\\vec{u} \\times \\vec{v}\\|^2 = \\|\\vec{u}\\|^2 \\|\\vec{v}\\|^2 - (\\vec{u} \\cdot \\vec{v})^2$.",
+          "Substitute $\\vec{u}\\cdot\\vec{v} = \\|\\vec{u}\\|\\|\\vec{v}\\|\\cos\\theta$.",
+          "$$\\|\\vec{u} \\times \\vec{v}\\|^2 = \\|\\vec{u}\\|^2 \\|\\vec{v}\\|^2 (1 - \\cos^2\\theta) = \\|\\vec{u}\\|^2 \\|\\vec{v}\\|^2 \\sin^2\\theta$$",
+          "Take square root: $$\\ delicacy \\|\\vec{u} \\times \\vec{v}\\| = \\|\\vec{u}\\| \\|\\vec{v}\\| \\sin\\theta$$"
+        ]
+      },
+      {
+        id: "determinant-2x2",
+        title: "2x2 Matrix Determinant Formula",
+        category: "Linear Algebra",
+        latex: "\\det \\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix} = ad - bc",
+        summary: "Calculates scaling factor of area under linear transformation defined by 2x2 matrix.",
+        author: "Gottfried Wilhelm Leibniz",
+        year: "1693 CE",
+        history: "Leibniz introduced determinants to solve systems of linear equations.",
+        type3D: "saddle",
+        proof: [
+          "Matrix column vectors are $\\vec{v}_1 = (a, c)^T$ and $\\vec{v}_2 = (b, d)^T$.",
+          "Area of parallelogram spanned in 2D plane equals magnitude of 3D z-cross product $(a,c,0) \\times (b,d,0)$.",
+          "$$\\vec{v}_1 \\times \\vec{v}_2 = (0, 0, ad - bc)$$",
+          "Magnitude of area scaling = $ad - bc$."
+        ]
+      },
+      {
+        id: "characteristic-equation",
+        title: "Characteristic Matrix Eigenvalue Equation",
+        category: "Linear Algebra",
+        latex: "\\det(A - \\lambda I) = 0",
+        summary: "Determines matrix eigenvalues $\\lambda$ corresponding to invariant direction vectors.",
+        author: "Augustin-Louis Cauchy",
+        year: "1829 CE",
+        history: "Formulated during studies of secular perturbations in celestial mechanics.",
+        type3D: "torus",
+        proof: [
+          "Eigenvalue equation: $$A\\vec{v} = \\lambda \\vec{v} \\quad (\\vec{v} \\neq \\vec{0})$$",
+          "Rewrite: $$(A - \\lambda I)\\vec{v} = \\vec{0}$$",
+          "For non-zero vector $\\vec{v}$ to exist in kernel/nullspace, matrix $(A - \\lambda I)$ must be non-invertible.",
+          "A matrix is singular iff its determinant equals zero: $$\\det(A - \\lambda I) = 0$$"
+        ]
+      },
+      {
+        id: "cauchy-schwarz",
+        title: "Cauchy-Schwarz Inequality",
+        category: "Linear Algebra",
+        latex: "|\\vec{u} \\cdot \\vec{v}| \\le \\|\\vec{u}\\| \\|\\vec{v}\\|",
+        summary: "Fundamental inequality bounding dot product of vectors in inner product spaces.",
+        author: "Cauchy, Bunyakovsky & Schwarz",
+        year: "1821–1888 CE",
+        history: "Generalized to infinite-dimensional Hilbert spaces by Hermann Schwarz.",
+        type3D: "gaussian",
+        proof: [
+          "Consider quadratic function $P(t) = \\|\\vec{u} + t\\vec{v}\\|^2 \\ge 0$ for all real $t$.",
+          "Expand inner product: $$P(t) = \\|\\vec{u}\\|^2 + 2t(\\vec{u}\\cdot\\vec{v}) + t^2\\|\\vec{v}\\|^2 \\ge 0$$",
+          "Since quadratic is non-negative, its discriminant $B^2 - 4AC \\le 0$.",
+          "$$4(\\vec{u}\\cdot\\vec{v})^2 - 4\\|\\vec{v}\\|^2\\|\\vec{u}\\|^2 \\le 0 \\implies |\\vec{u}\\cdot\\vec{v}| \\le \\|\\vec{u}\\|\\|\\vec{v}\\|$$"
+        ]
+      },
+
+      // --- PROBABILITY & STATISTICS (34-37) ---
+      {
+        id: "bayes-theorem",
+        title: "Bayes' Theorem of Conditional Probability",
+        category: "Probability & Statistics",
+        latex: "P(A|B) = \\frac{P(B|A) P(A)}{P(B)}",
+        summary: "Updates probability of hypothesis $A$ given observed evidence $B$.",
+        author: "Thomas Bayes & Pierre-Simon Laplace",
+        year: "1763 CE",
+        history: "Published posthumously in Philosophical Transactions of the Royal Society.",
+        type3D: "gaussian",
+        proof: [
+          "Definition of conditional probability: $$P(A|B) = \\frac{P(A \\cap B)}{P(B)}$$",
+          "Similarly: $$P(B|A) = \\frac{P(A \\cap B)}{P(A)} \\implies P(A \\cap B) = P(B|A) P(A)$$",
+          "Substitute joint probability $P(A \\cap B)$ back into first equation:",
+          "$$P(A|B) = \\frac{P(B|A) P(A)}{P(B)}$$"
+        ]
+      },
+      {
+        id: "normal-distribution",
+        title: "Gaussian Normal Distribution PDF",
+        category: "Probability & Statistics",
+        latex: "f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-\\frac{1}{2}\\left(\\frac{x-\\mu}{\\sigma}\\right)^2}",
+        summary: "Continuous probability density function describing bell-curve distributions.",
+        author: "Carl Friedrich Gauss",
+        year: "1809 CE",
+        history: "Derived by Gauss while modeling astronomical measurement errors.",
+        type3D: "gaussian",
+        proof: [
+          "Standard normal form $I = \\int_{-\\infty}^\\infty e^{-z^2/2} dz$.",
+          "Using polar integration $I^2 = \\int_0^{2\\pi} d\\theta \\int_0^\\infty r e^{-r^2/2} dr = 2\\pi [ -e^{-r^2/2} ]_0^\\infty = 2\\pi(1) = 2\\pi \\implies I = \\sqrt{2\\pi}$.",
+          "Substitute $z = \\frac{x-\\mu}{\\sigma}$, $dz = \\frac{dx}{\\sigma}$.",
+          "Normalizing total area to 1 requires dividing by scale factor $\\sigma\\sqrt{2\\pi}$."
+        ]
+      },
+      {
+        id: "variance-sum",
+        title: "Variance of Sum of Random Variables",
+        category: "Probability & Statistics",
+        latex: "\\text{Var}(X + Y) = \\text{Var}(X) + \\text{Var}(Y) + 2\\text{Cov}(X,Y)",
+        summary: "Calculates total variance of sum including covariance correlation terms.",
+        author: "Siméon Denis Poisson",
+        year: "1837 CE",
+        history: "Established basic foundation for portfolio theory and noise calculations.",
+        type3D: "saddle",
+        proof: [
+          "Definition: $\\text{Var}(Z) = E[(Z - E[Z])^2]$. Let $Z = X + Y$.",
+          "$Z - E[Z] = (X - \\mu_X) + (Y - \\mu_Y)$.",
+          "Square binomial: $(X - \\mu_X)^2 + (Y - \\mu_Y)^2 + 2(X - \\mu_X)(Y - \\mu_Y)$.",
+          "Take expectation $E[\\cdot]$ across terms:",
+          "$$E[(X-\\mu_X)^2] + E[(Y-\\mu_Y)^2] + 2E[(X-\\mu_X)(Y-\\mu_Y)] = \\text{Var}(X) + \\text{Var}(Y) + 2\\text{Cov}(X,Y)$$"
+        ]
+      },
+      {
+        id: "poisson-pmf",
+        title: "Poisson Distribution PMF",
+        category: "Probability & Statistics",
+        latex: "P(X = k) = \\frac{\\lambda^k e^{-\\lambda}}{k!}",
+        summary: "Models probability of $k$ discrete events occurring in fixed time interval.",
+        author: "Siméon Denis Poisson",
+        year: "1837 CE",
+        history: "Published in Poisson's treatise on legal probability judgments.",
+        type3D: "gaussian",
+        proof: [
+          "Derive as limit of Binomial $P(X=k) = \\binom{n}{k} p^k (1-p)^{n-k}$ with $p = \\lambda/n$ as $n \\to \\infty$.",
+          "$$\\lim_{n \\to \\infty} \\frac{n!}{k!(n-k)!} \\left(\\frac{\\lambda}{n}\\right)^k \\left(1 - \\frac{\\lambda}{n}\\right)^{n-k}$$",
+          "Note $\\lim_{n \\to \\infty} \\frac{n!}{(n-k)! n^k} = 1$ and $\\lim_{n \\to \\infty} \\left(1 - \\frac{\\lambda}{n}\\right)^n = e^{-\\lambda}$.",
+          "Substituting limits yields $P(X=k) = \\frac{\\lambda^k e^{-\\lambda}}{k!}$."
+        ]
+      },
+
+      // --- PHYSICS (38-42) ---
+      {
+        id: "kinematic-v2",
+        title: "Third Kinematic Motion Formula",
+        category: "Physics",
+        latex: "v^2 = u^2 + 2as",
+        summary: "Relates final velocity $v$, initial velocity $u$, constant acceleration $a$, and displacement $s$.",
+        author: "Evangelista Torricelli",
+        year: "1644 CE",
+        history: "Known historically as Torricelli's Equation for uniform acceleration.",
+        type3D: "saddle",
+        proof: [
+          "From velocity definition under uniform acceleration: $$v = u + at \\implies t = \\frac{v - u}{a}$$",
+          "From average displacement definition: $$s = v_{avg} t = \\left(\\frac{v + u}{2}\\right) t$$",
+          "Substitute $t$: $$s = \\left(\\frac{v + u}{2}\\right) \\left(\\frac{v - u}{a}\\right) = \\frac{v^2 - u^2}{2a}$$",
+          "Multiply both sides by $2a$: $$2as = v^2 - u^2 \\implies v^2 = u^2 + 2as$$"
+        ]
+      },
+      {
+        id: "universal-gravitation",
+        title: "Newton's Law of Universal Gravitation",
+        category: "Physics",
+        latex: "F = G \\frac{m_1 m_2}{r^2}",
+        summary: "Calculates gravitational attraction force between masses $m_1, m_2$ at distance $r$.",
+        author: "Isaac Newton",
+        year: "1687 CE",
+        history: "Published in Philosophiæ Naturalis Principia Mathematica.",
+        type3D: "blackhole",
+        proof: [
+          "Kepler's Third Law states orbital period $T^2 \\propto r^3$.",
+          "Centripetal acceleration for circular orbit $a_c = \\frac{v^2}{r} = \\frac{(2\\pi r / T)^2}{r} = \\frac{4\\pi^2 r}{T^2}$.",
+          "Substitute $T^2 = k r^3$: $$a_c = \\frac{4\\pi^2 r}{k r^3} = \\frac{4\\pi^2}{k} \\frac{1}{r^2}$$",
+          "By Newton's 2nd Law $F = m_1 a_c \\propto \\frac{m_1 m_2}{r^2} \\implies F = G \\frac{m_1 m_2}{r^2}$."
+        ]
+      },
+      {
+        id: "mass-energy",
+        title: "Mass-Energy Equivalence",
+        category: "Physics",
+        latex: "E = m c^2",
+        summary: "States rest mass energy $E$ equals mass $m$ multiplied by light speed squared.",
+        author: "Albert Einstein",
+        year: "1905 CE",
+        history: "Published in Einstein's Annus Mirabilis paper in Annalen der Physik.",
+        type3D: "blackhole",
+        proof: [
+          "Relativistic momentum $p = \\gamma m v$ where $\\gamma = (1 - v^2/c^2)^{-1/2}$.",
+          "Work done $E = \\int F dx = \\int \\frac{dp}{dt} dx = \\int v dp = v p - \\int p dv$.",
+          "Integrating gives $E = \\gamma m c^2 - m c^2$.",
+          "Rest energy (at $v=0$, $\\gamma=1$): $E_0 = m c^2$."
+        ]
+      },
+      {
+        id: "schwarzschild-radius",
+        title: "Schwarzschild Gravitational Radius",
+        category: "Physics",
+        latex: "r_s = \\frac{2GM}{c^2}",
+        summary: "Defines event horizon radius of non-rotating gravitational black hole.",
+        author: "Karl Schwarzschild",
+        year: "1916 CE",
+        history: "Solved exact Einstein field equations on WWI Russian front line.",
+        type3D: "blackhole",
+        proof: [
+          "Classical escape velocity formulation: setting $v_{escape} = c$.",
+          "Kinetic energy = Gravitational potential energy: $$\\frac{1}{2} m c^2 = \\frac{G M m}{r}$$",
+          "Cancel mass $m$: $$\\frac{1}{2} c^2 = \\frac{G M}{r}$$",
+          "Solve for radius $r$: $$r_s = \\frac{2GM}{c^2}$$"
+        ]
+      },
+      {
+        id: "de-broglie-wavelength",
+        title: "De Broglie Matter Wavelength",
+        category: "Physics",
+        latex: "\\lambda = \\frac{h}{p}",
+        summary: "Establishes wave-particle duality relating quantum wavelength $\\lambda$ to momentum $p$.",
+        author: "Louis de Broglie",
+        year: "1924 CE",
+        history: "Awarded 1929 Nobel Prize in Physics for predicting wave nature of electrons.",
+        type3D: "wave",
+        proof: [
+          "For photon: Energy $E = h\\nu$ (Planck) and $E = p c$ (Einstein).",
+          "Equating energies: $$h \\nu = p c \\implies h \\frac{c}{\\lambda} = p c$$",
+          "Cancel $c$: $$\\frac{h}{\\lambda} = p \\implies \\lambda = \\frac{h}{p}$$",
+          "De Broglie hypothesized this applies universally to all matter particles with momentum $p$."
+        ]
+      }
+    ];
+
+    // APPLICATION STATE
+    let activeTab = 'catalog';
+    let selectedCategory = 'All';
+    let searchQuery = '';
+    let favorites = JSON.parse(localStorage.getItem('fe_favorites_saksham') || '[]');
+    let activeProofId = FORMULAS_42[0].id;
+
+    let scene, camera, renderer, currentMesh;
+    let isWireframe = true;
+
+    window.onload = function() {
+      renderCatalog();
+      renderProofSidebar();
+      renderActiveProof();
+      renderTimeline();
+      updateFavCount();
+      
+      // Auto render KaTeX across DOM
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false}
+        ],
+        throwOnError: false
+      });
+    };
+
+    // TAB NAVIGATION
+    function switchTab(tabId) {
+      activeTab = tabId;
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+      // Update Nav Button Styles
+      document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active-tab'));
+      const activeNavBtn = document.getElementById(`nav-${tabId}`);
+      if (activeNavBtn) activeNavBtn.classList.add('active-tab');
+
+      if (tabId === 'lab3d') {
+        init3DLab();
+      }
+    }
+
+    // SEARCH & FILTERING
+    function handleSearch(val) {
+      searchQuery = val.trim().toLowerCase();
+      document.getElementById('clearSearchBtn').classList.toggle('hidden', searchQuery === '');
+      renderCatalog();
+    }
+
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      searchQuery = '';
+      document.getElementById('clearSearchBtn').classList.add('hidden');
+      renderCatalog();
+    }
+
+    function filterCategory(cat) {
+      selectedCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        if (btn.dataset.cat === cat) {
+          btn.className = "cat-pill active-cat px-3 py-1.5 rounded-xl border bg-sky-600 border-sky-500 text-white whitespace-nowrap transition-all";
+        } else {
+          btn.className = "cat-pill px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white whitespace-nowrap transition-all";
+        }
+      });
+      renderCatalog();
+    }
+
+    function toggleFavoritesFilter() {
+      if (selectedCategory === 'FavoritesOnly') {
+        filterCategory('All');
+      } else {
+        selectedCategory = 'FavoritesOnly';
+        renderCatalog();
+      }
+    }
+
+    function toggleFav(id, event) {
+      if (event) event.stopPropagation();
+      if (favorites.includes(id)) {
+        favorites = favorites.filter(item => item !== id);
+        showToast("Formula removed from saved bookmarks", "info");
+      } else {
+        favorites.push(id);
+        showToast("Formula saved to bookmarks", "success");
+      }
+      localStorage.setItem('fe_favorites_saksham', JSON.stringify(favorites));
+      updateFavCount();
+      renderCatalog();
+    }
+
+    function updateFavCount() {
+      document.getElementById('favCount').textContent = `Saved (${favorites.length})`;
+    }
+
+    // CATALOG RENDERER
+    function renderCatalog() {
+      const grid = document.getElementById('catalogGrid');
+      const filtered = FORMULAS_42.filter(item => {
+        const matchesCat = selectedCategory === 'All' ? true :
+          selectedCategory === 'FavoritesOnly' ? favorites.includes(item.id) :
+          item.category === selectedCategory;
+
+        const matchesSearch = searchQuery === '' ? true :
+          item.title.toLowerCase().includes(searchQuery) ||
+          item.author.toLowerCase().includes(searchQuery) ||
+          item.category.toLowerCase().includes(searchQuery) ||
+          item.summary.toLowerCase().includes(searchQuery) ||
+          item.latex.toLowerCase().includes(searchQuery);
+
+        return matchesCat && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-500 glass-panel rounded-2xl">
+            <i class="fa-solid fa-magnifying-glass text-3xl mb-2 text-slate-600"></i>
+            <p class="text-sm">No matching formulas found.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => {
+        const isFav = favorites.includes(item.id);
+        return `
+          <div class="glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-sky-500/50 transition-all flex flex-col justify-between group shadow-lg">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-800 text-sky-400 border border-slate-700">
+                  ${item.category}
+                </span>
+                <button onclick="toggleFav('${item.id}', event)" class="text-slate-500 hover:text-amber-400 transition-colors p-1">
+                  <i class="${isFav ? 'fa-solid text-amber-400' : 'fa-regular'} fa-bookmark text-sm"></i>
+                </button>
+              </div>
+
+              <h3 class="font-bold text-slate-100 text-base group-hover:text-sky-400 transition-colors">${item.title}</h3>
+              <p class="text-[11px] text-amber-400/90 font-medium my-0.5"><i class="fa-solid fa-user-graduate text-[10px] mr-1"></i> ${item.author} (${item.year})</p>
+
+              <div class="my-3 p-3 rounded-xl bg-slate-900/90 border border-slate-800 text-center text-sky-300 font-mono-code text-sm overflow-x-auto">
+                $$${item.latex}$$
+              </div>
+
+              <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-4">${item.summary}</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-1.5 pt-3 border-t border-slate-800/80 text-[11px] font-semibold">
+              <button onclick="jumpToProof('${item.id}')" class="py-1.5 rounded-lg bg-indigo-600/20 text-indigo-300 hover:bg-indigo-600 hover:text-white border border-indigo-500/30 transition-all text-center">
+                <i class="fa-solid fa-graduation-cap"></i> Proof
+              </button>
+              <button onclick="jumpToHistory('${item.id}')" class="py-1.5 rounded-lg bg-amber-600/20 text-amber-300 hover:bg-amber-600 hover:text-white border border-amber-500/30 transition-all text-center">
+                <i class="fa-solid fa-landmark"></i> History
+              </button>
+              <button onclick="copyLatex('${item.latex.replace(/\\/g, '\\\\')}')" class="py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 transition-all text-center">
+                <i class="fa-regular fa-copy"></i> LaTeX
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      renderMathInElement(grid, {
+        delimiters: [{left: "$$", right: "$$", display: true}, {left: "$", right: "$", display: false}],
+        throwOnError: false
+      });
+    }
+
+    // JUMP NAVIGATION HANDLERS
+    function jumpToProof(id) {
+      activeProofId = id;
+      switchTab('proofs');
+      renderProofSidebar();
+      renderActiveProof();
+    }
+
+    function jumpToHistory(id) {
+      switchTab('history');
+      const el = document.getElementById(`hist-${id}`);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // PROOF STUDIO RENDERER
+    function renderProofSidebar() {
+      const container = document.getElementById('proofListSidebar');
+      container.innerHTML = FORMULAS_42.map(item => {
+        const isActive = item.id === activeProofId;
+        return `
+          <button onclick="selectProof('${item.id}')" class="w-full text-left p-2.5 rounded-xl border transition-all ${isActive ? 'bg-sky-600/20 border-sky-500 text-sky-300 font-bold' : 'bg-slate-900/50 border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-slate-200'}">
+            <div class="truncate">${item.title}</div>
+            <div class="text-[10px] opacity-70 font-normal">${item.category}</div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectProof(id) {
+      activeProofId = id;
+      renderProofSidebar();
+      renderActiveProof();
+    }
+
+    function renderActiveProof() {
+      const viewer = document.getElementById('proofViewer');
+      const item = FORMULAS_42.find(f => f.id === activeProofId);
+      if (!item) return;
+
+      viewer.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/30">
+                ${item.category}
+              </span>
+              <h2 class="text-xl font-bold text-white mt-1">${item.title} — Step-by-Step Formal Derivation</h2>
+              <p class="text-xs text-amber-400 font-semibold"><i class="fa-solid fa-user-graduate mr-1"></i> Original Formulation: ${item.author} (${item.year})</p>
+            </div>
+            <button onclick="copyLatex('${item.latex.replace(/\\/g, '\\\\')}')" class="px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-200 hover:text-white text-xs font-semibold">
+              <i class="fa-regular fa-copy mr-1"></i> Copy LaTeX
+            </button>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center text-sky-300 text-xl font-mono-code overflow-x-auto shadow-inner">
+            $$${item.latex}$$
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-list-check text-sky-400"></i> Axiomatic Step-by-Step Derivation Steps
+            </h3>
+            
+            <div class="space-y-2.5">
+              ${item.proof.map((step, idx) => `
+                <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/30 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                    ${idx + 1}
+                  </div>
+                  <div class="text-xs text-slate-300 leading-relaxed overflow-x-auto w-full">
+                    ${step}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+
+      renderMathInElement(viewer, {
+        delimiters: [{left: "$$", right: "$$", display: true}, {left: "$", right: "$", display: false}],
+        throwOnError: false
+      });
+    }
+
+    // HISTORICAL TIMELINE RENDERER
+    function renderTimeline() {
+      const container = document.getElementById('timelineContainer');
+      container.innerHTML = FORMULAS_42.map(item => `
+        <div id="hist-${item.id}" class="relative group">
+          <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-amber-500 border-4 border-slate-950 group-hover:scale-125 transition-transform"></div>
+          <div class="glass-panel p-5 rounded-2xl border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-amber-400">${item.year}</span>
+              <span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">${item.category}</span>
+            </div>
+            <h3 class="font-bold text-slate-100 text-base">${item.title}</h3>
+            <p class="text-xs text-sky-400 font-semibold"><i class="fa-solid fa-feather mr-1"></i> ${item.author}</p>
+            <p class="text-xs text-slate-300 leading-relaxed">${item.history}</p>
+            <div class="pt-2">
+              <button onclick="jumpToProof('${item.id}')" class="text-xs font-semibold text-sky-400 hover:text-sky-300 flex items-center gap-1">
+                View Formal Proof <i class="fa-solid fa-arrow-right text-[10px]"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function init3DLab() {
+      const canvas = document.getElementById('webgl-canvas');
+      if (renderer) return; // Prevent double initialization
+
+      const width = canvas.parentElement.clientWidth;
+      const height = canvas.parentElement.clientHeight;
+
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+      camera.position.set(0, 15, 25);
+      camera.lookAt(0, 0, 0);
+
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+      renderer.setSize(width, height);
+
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+      scene.add(ambientLight);
+
+      const pointLight = new THREE.PointLight(0x38bdf8, 1.2);
+      pointLight.position.set(10, 20, 10);
+      scene.add(pointLight);
+
+      render3DSurface();
+      animate3D();
+    }
+
+    function render3DSurface() {
+      if (currentMesh) scene.remove(currentMesh);
+
+      const type = document.getElementById('surfaceSelect').value;
+      const geometry = new THREE.PlaneGeometry(22, 22, 60, 60);
+      const pos = geometry.attributes.position;
+
+      const titleEl = document.getElementById('visModelTitle');
+      const eqEl = document.getElementById('visModelEq');
+
+      if (type === 'gaussian') {
+        titleEl.textContent = "3D Gaussian Bell Surface";
+        eqEl.textContent = "z = 6 * exp(-0.08 * (x² + y²))";
+      } else if (type === 'saddle') {
+        titleEl.textContent = "Hyperbolic Paraboloid (Saddle Surface)";
+        eqEl.textContent = "z = (x² - y²) * 0.08";
+      } else if (type === 'wave') {
+        titleEl.textContent = "2D Quantum Wave Interference";
+        eqEl.textContent = "z = sin(x) * cos(y) * 2";
+      } else if (type === 'blackhole') {
+        titleEl.textContent = "Schwarzschild Spacetime Well";
+        eqEl.textContent = "z = -10 / (sqrt(x² + y²) + 0.8)";
+      } else if (type === 'torus') {
+        titleEl.textContent = "Riemannian 3D Torus Surface";
+        eqEl.textContent = "z = sin(sqrt(x² + y²)) * 2";
+      } else if (type === 'mobius') {
+        titleEl.textContent = "3D Mobius Strip Surface";
+        eqEl.textContent = "z = cos(x * 0.5) * sin(y)";
+      }
+
+      for (let i = 0; i < pos.count; i++) {
+        let x = pos.getX(i);
+        let y = pos.getY(i);
+        let z = 0;
+
+        if (type === 'gaussian') {
+          z = 6 * Math.exp(-0.08 * (x * x + y * y));
+        } else if (type === 'saddle') {
+          z = (x * x - y * y) * 0.08;
+        } else if (type === 'wave') {
+          z = Math.sin(x) * Math.cos(y) * 2;
+        } else if (type === 'blackhole') {
+          z = -10 / (Math.sqrt(x * x + y * y) + 0.8);
+        } else if (type === 'torus') {
+          z = Math.sin(Math.sqrt(x * x + y * y)) * 2;
+        } else if (type === 'mobius') {
+          z = Math.cos(x * 0.5) * Math.sin(y);
+        }
+
+        pos.setZ(i, z);
+      }
+
+      geometry.computeVertexNormals();
+
+      const material = new THREE.MeshPhongMaterial({
+        color: 0x38bdf8,
+        wireframe: isWireframe,
+        side: THREE.DoubleSide
+      });
+
+      currentMesh = new THREE.Mesh(geometry, material);
+      currentMesh.rotation.x = -Math.PI / 3;
+      scene.add(currentMesh);
+    }
+
+    function toggleWireframe3D() {
+      isWireframe = !isWireframe;
+      if (currentMesh) {
+        currentMesh.material.wireframe = isWireframe;
+      }
+    }
+
+    function animate3D() {
+      requestAnimationFrame(animate3D);
+      if (currentMesh) {
+        currentMesh.rotation.z += 0.004;
+      }
+      renderer.render(scene, camera);
+    }
+
+    // UTILITY: TOAST & COPY
+    function copyLatex(latex) {
+      const el = document.createElement('textarea');
+      el.value = latex;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      showToast("LaTeX code copied to clipboard!", "success");
+    }
+
+    function showToast(msg, type = "success") {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      document.getElementById('toastIcon').className = type === 'success' ? 'fa-solid fa-circle-check text-emerald-400' : 'fa-solid fa-circle-info text-sky-400';
+      
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2500);
+    }
+
+    // QUIZ SYSTEM
+    let quizScore = 0;
+    let quizTotal = 0;
+
+    function openQuizModal() {
+      document.getElementById('quizModal').classList.remove('hidden');
+      generateNextQuizQuestion();
+    }
+
+    function closeQuizModal() {
+      document.getElementById('quizModal').classList.add('hidden');
+    }
+
+    function generateNextQuizQuestion() {
+      const item = FORMULAS_42[Math.floor(Math.random() * FORMULAS_42.length)];
+      const container = document.getElementById('quizContent');
+
+      // Generate options
+      const correctAuthor = item.author;
+      const authors = [...new Set(FORMULAS_42.map(f => f.author))].filter(a => a !== correctAuthor);
+      const wrongOpt1 = authors[Math.floor(Math.random() * authors.length)];
+      const wrongOpt2 = authors[(Math.floor(Math.random() * authors.length) + 1) % authors.length];
+      const wrongOpt3 = authors[(Math.floor(Math.random() * authors.length) + 2) % authors.length];
+
+      const options = [correctAuthor, wrongOpt1, wrongOpt2, wrongOpt3].sort(() => Math.random() - 0.5);
+      const correctIdx = options.indexOf(correctAuthor);
+
+      container.innerHTML = `
+        <div class="space-y-3">
+          <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/30">
+            ${item.category}
+          </span>
+          <p class="text-sm font-semibold text-slate-100">Which mathematician(s) originalized or historicalized the derivation of the formula: <span class="text-sky-300 font-bold">${item.title}</span>?</p>
+          
+          <div class="my-2 p-3 rounded-xl bg-slate-900 border border-slate-800 text-center text-sky-300 font-mono-code text-sm">
+            $$${item.latex}$$
+          </div>
+
+          <div class="space-y-2 mt-3" id="quizOptions">
+            ${options.map((opt, idx) => `
+              <button onclick="checkAnswer(${idx}, ${correctIdx}, '${item.history.replace(/'/g, "\\'")}')" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-900/80 hover:bg-slate-800 text-xs text-slate-200 transition-all flex items-center justify-between">
+                <span>${opt}</span>
+                <i class="fa-regular fa-circle text-slate-600"></i>
+              </button>
+            `).join('')}
+          </div>
+
+          <div id="quizFeedback" class="hidden p-3 rounded-xl text-xs mt-3"></div>
+        </div>
+      `;
+
+      renderMathInElement(container, {
+        delimiters: [{left: "$$", right: "$$", display: true}, {left: "$", right: "$", display: false}],
+        throwOnError: false
+      });
+    }
+
+    function checkAnswer(selected, correct, historyText) {
+      quizTotal++;
+      const options = document.getElementById('quizOptions').children;
+      const feedback = document.getElementById('quizFeedback');
+
+      for (let i = 0; i < options.length; i++) {
+        options[i].disabled = true;
+        if (i === correct) {
+          options[i].className = "w-full text-left p-3 rounded-xl border border-emerald-500/60 bg-emerald-950/40 text-emerald-300 text-xs flex items-center justify-between font-semibold";
+        } else if (i === selected) {
+          options[i].className = "w-full text-left p-3 rounded-xl border border-rose-500/60 bg-rose-950/40 text-rose-300 text-xs flex items-center justify-between font-semibold";
+        }
+      }
+
+      if (selected === correct) {
+        quizScore++;
+        feedback.className = "p-3 rounded-xl text-xs mt-3 bg-emerald-950/50 border border-emerald-500/40 text-emerald-300";
+        feedback.innerHTML = `<strong>Correct!</strong> ${historyText}`;
+      } else {
+        feedback.className = "p-3 rounded-xl text-xs mt-3 bg-rose-950/50 border border-rose-500/40 text-rose-300";
+        feedback.innerHTML = `<strong>Incorrect.</strong> ${historyText}`;
+      }
+
+      feedback.classList.remove('hidden');
+      document.getElementById('quizScoreText').textContent = `Score: ${quizScore} / ${quizTotal}`;
+    }
+  </script>
+</body>
+</html>
