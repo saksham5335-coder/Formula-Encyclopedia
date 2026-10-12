@@ -95,7 +95,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
       
       <!-- Brand Logo & Credit Tag -->
-      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('catalog')">
+      <button type="button" aria-label="Go to Formula Catalog" class="flex items-center space-x-3 cursor-pointer text-left" onclick="switchTab('catalog')">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 via-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/20 font-bold text-xl">
           ∑
         </div>
@@ -103,12 +103,12 @@
           <h1 class="font-extrabold text-lg sm:text-xl tracking-tight text-white leading-tight">Formula Encyclopedia</h1>
           <p class="text-xs text-amber-400 font-semibold tracking-wide uppercase">Developed by Saksham Sharma</p>
         </div>
-      </div>
+      </button>
 
       <!-- Desktop Nav Buttons -->
       <nav class="hidden md:flex items-center gap-1 bg-slate-900/80 p-1 rounded-xl border border-slate-800">
         <button id="nav-catalog" onclick="switchTab('catalog')" class="active-tab px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all">
-          <i class="fa-solid fa-book-bookmark mr-1.5"></i> Catalog (42)
+          <i class="fa-solid fa-book-bookmark mr-1.5"></i> Catalog (43)
         </button>
         <button id="nav-lab3d" onclick="switchTab('lab3d')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition-all">
           <i class="fa-solid fa-cube mr-1.5 text-sky-400"></i> 3D Surface Lab
@@ -138,16 +138,16 @@
 
     <!-- Mobile Nav Bar -->
     <div class="flex md:hidden items-center justify-around border-t border-slate-800/60 bg-slate-950/90 py-2 text-xs font-medium">
-      <button onclick="switchTab('catalog')" class="text-sky-400 flex flex-col items-center">
+      <button data-mobile-tab="catalog" aria-current="page" onclick="switchTab('catalog')" class="text-sky-400 flex flex-col items-center">
         <i class="fa-solid fa-book-bookmark text-base"></i> Catalog
       </button>
-      <button onclick="switchTab('lab3d')" class="text-slate-400 hover:text-sky-400 flex flex-col items-center">
+      <button data-mobile-tab="lab3d" onclick="switchTab('lab3d')" class="text-slate-400 hover:text-sky-400 flex flex-col items-center">
         <i class="fa-solid fa-cube text-base"></i> 3D Lab
       </button>
-      <button onclick="switchTab('proofs')" class="text-slate-400 hover:text-indigo-400 flex flex-col items-center">
+      <button data-mobile-tab="proofs" onclick="switchTab('proofs')" class="text-slate-400 hover:text-indigo-400 flex flex-col items-center">
         <i class="fa-solid fa-graduation-cap text-base"></i> Proofs
       </button>
-      <button onclick="switchTab('history')" class="text-slate-400 hover:text-amber-400 flex flex-col items-center">
+      <button data-mobile-tab="history" onclick="switchTab('history')" class="text-slate-400 hover:text-amber-400 flex flex-col items-center">
         <i class="fa-solid fa-landmark text-base"></i> History
       </button>
     </div>
@@ -165,18 +165,19 @@
           <input 
             type="text" 
             id="searchInput" 
-            placeholder="Search all 42 formulas, proofs, mathematicians, or domains..." 
+            aria-label="Search formulas, proofs, mathematicians, and domains"
+            placeholder="Search all 43 formulas, proofs, mathematicians, or domains..." 
             oninput="handleSearch(this.value)"
             class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700/60 text-slate-100 text-sm focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all placeholder:text-slate-500"
           >
-          <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
+          <button id="clearSearchBtn" type="button" aria-label="Clear search" title="Clear search" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
             <i class="fa-solid fa-xmark text-sm"></i>
           </button>
         </div>
 
         <!-- Domain Category Pills -->
         <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none text-xs font-semibold">
-          <button onclick="filterCategory('All')" class="cat-pill active-cat px-3 py-1.5 rounded-xl border bg-sky-600 border-sky-500 text-white whitespace-nowrap transition-all" data-cat="All">All 42</button>
+          <button onclick="filterCategory('All')" class="cat-pill active-cat px-3 py-1.5 rounded-xl border bg-sky-600 border-sky-500 text-white whitespace-nowrap transition-all" data-cat="All">All 43</button>
           <button onclick="filterCategory('Algebra')" class="cat-pill px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white whitespace-nowrap transition-all" data-cat="Algebra">Algebra</button>
           <button onclick="filterCategory('Geometry')" class="cat-pill px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white whitespace-nowrap transition-all" data-cat="Geometry">Geometry</button>
           <button onclick="filterCategory('Trigonometry')" class="cat-pill px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white whitespace-nowrap transition-all" data-cat="Trigonometry">Trigonometry</button>
@@ -189,7 +190,7 @@
 
       <!-- Formulas Grid -->
       <div id="catalogGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        <!-- 42 Formula cards populated via JS -->
+        <!-- Formula cards populated via JS -->
       </div>
     </section>
 
@@ -220,7 +221,7 @@
           
           <!-- WebGL Viewport Container -->
           <div class="lg:col-span-8 xl:col-span-9 h-[540px] rounded-2xl bg-slate-950 border border-slate-800 relative overflow-hidden group select-none">
-            <canvas id="webgl-canvas" class="w-full h-full cursor-grab active:cursor-grabbing touch-none"></canvas>
+            <canvas id="webgl-canvas" role="img" aria-label="Interactive three-dimensional mathematical surface. Drag to rotate and scroll or pinch to zoom." class="w-full h-full cursor-grab active:cursor-grabbing touch-none"></canvas>
             
             <!-- Information Overlay -->
             <div class="absolute bottom-4 left-4 bg-slate-900/90 backdrop-blur-md border border-slate-800 p-3.5 rounded-xl text-xs space-y-1.5 text-slate-300 max-w-md shadow-2xl pointer-events-none">
@@ -234,8 +235,8 @@
 
             <!-- Viewport Overlay Badge -->
             <div class="absolute top-4 right-4 flex items-center gap-2 pointer-events-none">
-              <span id="fpsBadge" class="px-2.5 py-1 rounded-lg bg-slate-900/80 border border-slate-800 text-[10px] font-mono-code text-emerald-400">
-                60 FPS
+              <span id="fpsBadge" class="px-2.5 py-1 rounded-lg bg-slate-900/80 border border-slate-800 text-[10px] font-mono-code text-emerald-400" aria-live="polite">
+                Measuring…
               </span>
             </div>
           </div>
@@ -251,12 +252,12 @@
               <select id="surfaceSelect" onchange="render3DSurface()" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 font-semibold focus:outline-none focus:border-sky-500">
                 <option value="gaussian">3D Gaussian Bell Surface</option>
                 <option value="saddle">Hyperbolic Paraboloid (Saddle)</option>
-                <option value="wave">2D Quantum Wave Interference</option>
-                <option value="sombrero">Sombrero (Bessel Ripple)</option>
+                <option value="wave">2D Wave Interference</option>
+                <option value="sombrero">Radial Sinc-Like Ripple</option>
                 <option value="monkeysaddle">Monkey Saddle (x³ - 3xy²)</option>
-                <option value="blackhole">Schwarzschild Spacetime Well</option>
-                <option value="torus">Riemannian 3D Torus Wave</option>
-                <option value="mobius">3D Mobius Strip Topology</option>
+                <option value="blackhole">Illustrative Radial Potential Well</option>
+                <option value="torus">Parametric Torus</option>
+                <option value="mobius">Parametric Möbius Strip</option>
               </select>
             </div>
 
@@ -296,7 +297,7 @@
                   <span>Amplitude Scale</span>
                   <span id="ampVal" class="font-mono-code text-sky-400">1.0x</span>
                 </div>
-                <input type="range" id="ampSlider" min="0.1" max="2.5" step="0.1" value="1.0" oninput="handleAmpChange(this.value)" class="w-full accent-sky-500 bg-slate-900 rounded-lg cursor-pointer h-1.5">
+                <input type="range" id="ampSlider" aria-label="Surface amplitude" min="0.1" max="2.5" step="0.1" value="1.0" oninput="handleAmpChange(this.value)" class="w-full accent-sky-500 bg-slate-900 rounded-lg cursor-pointer h-1.5">
               </div>
 
               <!-- Frequency / Density Slider -->
@@ -305,7 +306,7 @@
                   <span>Frequency / Scale</span>
                   <span id="freqVal" class="font-mono-code text-sky-400">1.0x</span>
                 </div>
-                <input type="range" id="freqSlider" min="0.3" max="2.5" step="0.1" value="1.0" oninput="handleFreqChange(this.value)" class="w-full accent-sky-500 bg-slate-900 rounded-lg cursor-pointer h-1.5">
+                <input type="range" id="freqSlider" aria-label="Surface frequency and scale" min="0.3" max="2.5" step="0.1" value="1.0" oninput="handleFreqChange(this.value)" class="w-full accent-sky-500 bg-slate-900 rounded-lg cursor-pointer h-1.5">
               </div>
 
               <!-- Animation Wave Speed -->
@@ -314,7 +315,7 @@
                   <span>Wave Rippling Speed</span>
                   <span id="speedVal" class="font-mono-code text-sky-400">1.0x</span>
                 </div>
-                <input type="range" id="speedSlider" min="0" max="3.0" step="0.2" value="1.0" oninput="handleSpeedChange(this.value)" class="w-full accent-sky-500 bg-slate-900 rounded-lg cursor-pointer h-1.5">
+                <input type="range" id="speedSlider" aria-label="Surface animation speed" min="0" max="3.0" step="0.2" value="1.0" oninput="handleSpeedChange(this.value)" class="w-full accent-sky-500 bg-slate-900 rounded-lg cursor-pointer h-1.5">
               </div>
 
               <!-- Grid Resolution Density -->
@@ -335,9 +336,7 @@
 
         </div>
       </div>
-    </section>
-
-    <!-- ==================== TAB 3: PROOF STUDIO ==================== -->
+    </section><!-- ==================== TAB 3: PROOF STUDIO ==================== -->
     <section id="tab-proofs" class="tab-content hidden space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
@@ -345,7 +344,7 @@
         <div class="lg:col-span-4 glass-panel p-4 rounded-2xl border border-slate-800 space-y-3">
           <h3 class="font-bold text-sm text-slate-200 flex items-center justify-between">
             <span>Select Formula for Proof</span>
-            <span class="text-xs font-mono-code text-sky-400">42 Available</span>
+            <span class="text-xs font-mono-code text-sky-400">43 Available</span>
           </h3>
           <div id="proofListSidebar" class="space-y-1.5 max-h-[600px] overflow-y-auto pr-1 text-xs">
             <!-- Sidebar list populated via JS -->
@@ -379,9 +378,9 @@
   </div>
 
   <!-- Quiz Modal -->
-  <div id="quizModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+  <div id="quizModal" role="dialog" aria-modal="true" aria-labelledby="quizTitle" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
     <div class="glass-panel rounded-2xl max-w-lg w-full p-6 border border-slate-800 shadow-2xl relative">
-      <button onclick="closeQuizModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2">
+      <button type="button" aria-label="Close quiz" title="Close quiz" onclick="closeQuizModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2">
         <i class="fa-solid fa-xmark text-lg"></i>
       </button>
 
@@ -390,8 +389,8 @@
           <i class="fa-solid fa-brain"></i>
         </div>
         <div>
-          <h2 class="font-bold text-lg text-white">Formula Mastery Quiz</h2>
-          <p class="text-xs text-slate-400">Test your mastery across all 42 mathematical theorems</p>
+          <h2 id="quizTitle" class="font-bold text-lg text-white">Formula Mastery Quiz</h2>
+          <p class="text-xs text-slate-400">Test your mastery across all 43 mathematical formulas</p>
         </div>
       </div>
 
@@ -426,12 +425,28 @@
     let currentCategory = 'All';
     let searchQuery = '';
     let showOnlyFavorites = false;
-    let savedFavorites = JSON.parse(localStorage.getItem('fe_saved_favs') || '[]');
+    function loadSavedFavorites() {
+      try {
+        const parsed = window.localStorage.getItem('fe_saved_favs');
+        const value = parsed ? JSON.parse(parsed) : [];
+        return Array.isArray(value) ? value.filter(id => typeof id === 'string') : [];
+      } catch (error) {
+        return [];
+      }
+    }
+    function persistSavedFavorites() {
+      try {
+        window.localStorage.setItem('fe_saved_favs', JSON.stringify(savedFavorites));
+      } catch (error) {
+        showToast('Bookmarks could not be saved in this browser session.', 'error');
+      }
+    }
+    let savedFavorites = loadSavedFavorites();
     let currentProofId = 'pythagoras';
     let quizScore = { correct: 0, total: 0 };
     let currentQuizItem = null;
 
-    // MASTER DATABASE OF 42 FORMULAS WITH PROOFS, HISTORY & METADATA
+    // MASTER DATABASE OF 43 FORMULAS WITH PROOFS, HISTORY & METADATA
     const FORMULAS_DATABASE = [
       // ALGEBRA
       {
@@ -439,14 +454,14 @@
         title: "Quadratic Formula",
         category: "Algebra",
         latex: "x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}",
-        desc: "Solutions to the general quadratic polynomial equation $ax^2 + bx + c = 0$.",
+        desc: "Solutions to $ax^2+bx+c=0$, assuming $a \\ne 0$.",
         surface3d: "saddle",
         proof: {
           summary: "Derived by completing the square on $ax^2 + bx + c = 0$.",
           steps: [
-            "Divide the equation by $a$: $x^2 + \\frac{b}{a}x + \\frac{c}{a} = 0$.",
+            "Assume $a \\ne 0$ and divide by $a$: $x^2 + \\frac{b}{a}x + \\frac{c}{a} = 0$.",
             "Subtract $\\frac{c}{a}$ from both sides: $x^2 + \\frac{b}{a}x = -\\frac{c}{a}$.",
-            "Complete the square by adding $(\\frac{b}{2a})^2$ to both sides.",
+            "Add $(\\frac{b}{2a})^2 = \\frac{b^2}{4a^2}$ to both sides to complete the square.",
             "$(x + \\frac{b}{2a})^2 = \\frac{b^2}{4a^2} - \\frac{c}{a} = \\frac{b^2 - 4ac}{4a^2}$.",
             "Take square roots: $x + \\frac{b}{2a} = \\pm \\frac{\\sqrt{b^2 - 4ac}}{2a}$.",
             "Solve for $x$: $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$."
@@ -510,13 +525,13 @@
       },
       {
         id: "am_gm",
-        title: "AM-GM Inequality",
+        title: "AM-GM Inequality (General Form)",
         category: "Algebra",
         latex: "\\frac{x_1 + x_2 + \\dots + x_n}{n} \\ge \\sqrt[n]{x_1 x_2 \\dots x_n}",
         desc: "Arithmetic Mean is always greater than or equal to Geometric Mean for non-negative real numbers.",
         surface3d: "gaussian",
         proof: {
-          summary: "Proven for $n=2$ using square non-negativity $(\\sqrt{a}-\\sqrt{b})^2 \\ge 0$.",
+          summary: "The displayed derivation proves the two-variable case. The general n-variable inequality follows from the standard induction or concavity-of-logarithm argument.",
           steps: [
             "For $a, b \\ge 0$, $(\\sqrt{a} - \\sqrt{b})^2 \\ge 0$.",
             "Expand: $a - 2\\sqrt{ab} + b \\ge 0$.",
@@ -649,11 +664,10 @@
         proof: {
           summary: "Inductive planar graph reduction after removing one face.",
           steps: [
-            "Project convex 3D polyhedron onto a 2D plane graph by removing 1 face ($F$ becomes $F-1$).",
-            "Perform reduction operations on the graph (removing edges or vertices).",
-            "Removing an edge bounding two faces decreases $E$ by 1 and $F$ by 1, leaving $V - E + F$ unchanged.",
-            "Removing a degree-1 vertex decreases $V$ by 1 and $E$ by 1, leaving $V - E + F$ unchanged.",
-            "Reduce graph down to 1 single tree vertex ($V=1, E=0, F=1$), where $V - E + F = 1 - 0 + 1 = 2$."
+            "Represent the convex polyhedron as a connected planar graph, counting the exterior region as a face.",
+            "Choose a spanning tree. It contains all $V$ vertices and exactly $V-1$ edges, and the planar embedding has one face.",
+            "Add each of the remaining $E-(V-1)$ edges. Every added edge creates exactly one new face, so $F=1+E-(V-1)$.",
+            "Simplify: $F=E-V+2$, hence $V-E+F=2$."
           ]
         },
         history: { author: "Leonhard Euler", year: "1758", story: "Created the foundation of modern topology and graph theory when studying polyhedral networks." }
@@ -722,12 +736,11 @@
         desc: "Relates side lengths of any triangle to the sines of its angles and circumradius $R$.",
         surface3d: "saddle",
         proof: {
-          summary: "Expressed using triangle altitude height $h$.",
+          summary: "Use the extended sine rule: each side is a chord of the circumcircle, and a chord subtending angle A has length 2R sin A.",
           steps: [
-            "Draw altitude $h$ from vertex $C$ to side $c$.",
-            "In right triangle 1: $h = b \\sin A$. In right triangle 2: $h = a \\sin B$.",
-            "Equate $h$: $b \\sin A = a \\sin B \\implies \\frac{a}{\\sin A} = \\frac{b}{\\sin B}$.",
-            "Repeat for altitude from vertex $A$ to get $\\frac{b}{\\sin B} = \\frac{c}{\\sin C}$."
+            "Let R be the circumradius. The chord opposite angle A has length $a=2R\\sin A$.",
+            "Similarly, $b=2R\\sin B$ and $c=2R\\sin C$.",
+            "Divide each equation by its sine to obtain $\\frac{a}{\\sin A}=\\frac{b}{\\sin B}=\\frac{c}{\\sin C}=2R$.",
           ]
         },
         history: { author: "Abu al-Wafa' al-Buzjani", year: "c. 980 CE", story: "Discovered during the Islamic Golden Age in Baghdad, enabling precise spherical qibla calculations." }
@@ -860,7 +873,7 @@
             "Start with product rule derivative: $\\frac{d}{dx}(uv) = u \\frac{dv}{dx} + v \\frac{du}{dx}$.",
             "Integrate both sides with respect to $x$: $\\int \\frac{d}{dx}(uv) dx = \\int u \\frac{dv}{dx} dx + \\int v \\frac{du}{dx} dx$.",
             "Simplify left side: $uv = \\int u \\, dv + \\int v \\, du$.",
-            "Rearrange terms: \\int u \\, dv = uv - \\int v \\, du$."
+            "Rearrange terms: $\\int u \\, dv = uv - \\int v \\, du$.",
           ]
         },
         history: { author: "Brook Taylor", year: "1715", story: "First derived by Taylor in Methodus Incrementorum Directa et Inversa." }
@@ -870,16 +883,16 @@
         title: "Taylor Series Expansion",
         category: "Calculus",
         latex: "f(x) = \\sum_{n=0}^\\infty \\frac{f^{(n)}(a)}{n!}(x - a)^n",
-        desc: "Representation of an infinitely differentiable function as an infinite power series around $a$.",
+        desc: "Taylor polynomial terms built from derivatives at $a$. A smooth function need not equal its Taylor series; equality requires suitable convergence conditions (for example, analyticity).",
         surface3d: "sombrero",
         proof: {
-          summary: "Repeated term-by-term differentiation of power series $f(x) = \\sum c_n (x-a)^n$.",
+          summary: "If $f$ is represented by a convergent power series near $a$, term-by-term differentiation identifies its coefficients. Infinite differentiability alone does not guarantee that the series equals $f$.",
           steps: [
             "Assume $f(x) = c_0 + c_1(x-a) + c_2(x-a)^2 + c_3(x-a)^3 + \\dots$",
             "Evaluate $f(a) = c_0$.",
             "First derivative $f'(x) = c_1 + 2c_2(x-a) + 3c_3(x-a)^2 + \\dots \\implies f'(a) = c_1$.",
             "Second derivative $f''(x) = 2c_2 + 6c_3(x-a) + \\dots \\implies f''(a) = 2! c_2 \\implies c_2 = \\frac{f''(a)}{2!}$.",
-            "By induction for $n$-th derivative: $f^{(n)}(a) = n! c_n \\implies c_n = \\frac{f^{(n)}(a)}{n!}$."
+            "By induction, $f^{(n)}(a) = n!c_n$, so $c_n = \\frac{f^{(n)}(a)}{n!}$. This determines the Taylor coefficients; a separate convergence/remainder argument is needed to conclude that the infinite series equals $f(x)$.",
           ]
         },
         history: { author: "Brook Taylor & Colin Maclaurin", year: "1715", story: "Revolutionized function approximation and modern computer algorithm approximations." }
@@ -932,7 +945,7 @@
         desc: "Geometric definition of dot product relating vector lengths and enclosed angle.",
         surface3d: "saddle",
         proof: {
-          summary: "Law of Cosines applied to vector triangle $\\mathbf{w} = \\mathbf{u} - \\mathbf{v}$.",
+          summary: "For nonzero vectors $\\mathbf{u}$ and $\\mathbf{v}$, apply the Law of Cosines to their triangle; the angle $\\theta$ lies in $[0,\\pi]$.",
           steps: [
             "In vector triangle with sides $\\mathbf{u}, \\mathbf{v}, \\mathbf{w} = \\mathbf{u} - \\mathbf{v}$, Law of Cosines gives: $\\|\\mathbf{u}-\\mathbf{v}\\|^2 = \\|\\mathbf{u}\\|^2 + \\|\\mathbf{v}\\|^2 - 2\\|\\mathbf{u}\\|\\|\\mathbf{v}\\| \\cos \\theta$.",
             "Expand left side using dot products: $\\|\\mathbf{u}-\\mathbf{v}\\|^2 = (\\mathbf{u}-\\mathbf{v}) \\cdot (\\mathbf{u}-\\mathbf{v}) = \\|\\mathbf{u}\\|^2 - 2(\\mathbf{u}\\cdot\\mathbf{v}) + \\|\\mathbf{v}\\|^2$.",
@@ -954,9 +967,9 @@
           steps: [
             "Use Lagrange's Identity: $\\|\\mathbf{u} \\times \\mathbf{v}\\|^2 = \\|\\mathbf{u}\\|^2 \\|\\mathbf{v}\\|^2 - (\\mathbf{u} \\cdot \\mathbf{v})^2$.",
             "Substitute dot product $\\mathbf{u}\\cdot\\mathbf{v} = \\|\\mathbf{u}\\|\\|\\mathbf{v}\\| \\cos \\theta$.",
-            "\\|\\mathbf{u} \\times \\mathbf{v}\\|^2 = \\|\\mathbf{u}\\|^2 \\|\\mathbf{v}\\|^2 - \\|\\mathbf{u}\\|^2 \\|\\mathbf{v}\\|^2 \\cos^2 \\theta = \\|\\mathbf{u}\\|^2 \\|\\mathbf{v}\\|^2 (1 - \\cos^2 \\theta)$.",
+            "Substitute and simplify: $\\|\\mathbf{u} \\times \\mathbf{v}\\|^2 = \\|\\mathbf{u}\\|^2 \\|\\mathbf{v}\\|^2 - \\|\\mathbf{u}\\|^2 \\|\\mathbf{v}\\|^2 \\cos^2 \\theta = \\|\\mathbf{u}\\|^2 \\|\\mathbf{v}\\|^2 (1 - \\cos^2 \\theta)$.",
             "Substitute $1 - \\cos^2 \\theta = \\sin^2 \\theta$: $\\|\\mathbf{u} \\times \\mathbf{v}\\|^2 = \\|\\mathbf{u}\\|^2 \\|\\mathbf{v}\\|^2 \\sin^2 \\theta$.",
-            "Take square root: $\\|\\mathbf{u} \\times \\mathbf{v}\\| = \\|\\mathbf{u}\\| \\|\\mathbf{v}\\| \\sin \\theta$."
+            "Because the angle between the vectors is defined in $[0,\\pi]$, $\\sin \\theta \\ge 0$. Taking the nonnegative square root gives $\\|\\mathbf{u} \\times \\mathbf{v}\\| = \\|\\mathbf{u}\\| \\|\\mathbf{v}\\| \\sin \\theta$.",
           ]
         },
         history: { author: "William Rowan Hamilton", year: "1843", story: "Emerged from non-commutative multiplication of vector components in quaternionic algebra." }
@@ -974,7 +987,7 @@
             "Let column vectors be $\\mathbf{v}_1 = (a, c, 0)^T$ and $\\mathbf{v}_2 = (b, d, 0)^T$ in 3D space.",
             "Area of parallelogram spanned by vectors is given by $z$-component of cross product $\\mathbf{v}_1 \\times \\mathbf{v}_2$.",
             "Compute cross product: $\\mathbf{v}_1 \\times \\mathbf{v}_2 = (0, 0, ad - bc)^T$.",
-            "Magnitude of $z$-component yields signed area $\\det(A) = ad - bc$."
+            "The determinant $ad-bc$ is the signed area scale factor; the ordinary parallelogram area is its absolute value, $|ad-bc|$.",
           ]
         },
         history: { author: "Gottfried Wilhelm Leibniz & Seki Takakazu", year: "1693", story: "Independently invented determinants in Germany and Japan to solve linear systems of equations." }
@@ -1007,7 +1020,7 @@
         proof: {
           summary: "Non-negativity of quadratic scalar function $P(t) = \\|\\mathbf{u} + t\\mathbf{v}\\|^2 \\ge 0$.",
           steps: [
-            "For any scalar $t \\in \\mathbb{R}$, $P(t) = \\|\\mathbf{u} + t\\mathbf{v}\\|^2 \\ge 0$.",
+            "If $\\mathbf{v}=\\mathbf{0}$, the inequality is immediate. Otherwise, for every $t \\in \\mathbb{R}$, $P(t) = \\|\\mathbf{u} + t\\mathbf{v}\\|^2 \\ge 0$.",
             "Expand using inner product: $P(t) = \\|\\mathbf{u}\\|^2 + 2t(\\mathbf{u}\\cdot\\mathbf{v}) + t^2 \\|\\mathbf{v}\\|^2 \\ge 0$.",
             "This is a quadratic polynomial $At^2 + Bt + C \\ge 0$ with $A = \\|\\mathbf{v}\\|^2, B = 2(\\mathbf{u}\\cdot\\mathbf{v}), C = \\|\\mathbf{u}\\|^2$.",
             "For quadratic to remain non-negative, discriminant must be $\\le 0$: $B^2 - 4AC \\le 0$.",
@@ -1027,7 +1040,7 @@
         desc: "Calculates conditional probability of an event given prior knowledge of conditions.",
         surface3d: "gaussian",
         proof: {
-          summary: "Symmetry of joint probability intersection $P(A \\cap B)$.",
+          summary: "For events A and B with $P(B)>0$, conditional probability gives the result; the ratio $P(B|A)$ also requires $P(A)>0$.",
           steps: [
             "Definition of conditional probability: $P(A|B) = \\frac{P(A \\cap B)}{P(B)}$ (where $P(B) > 0$).",
             "Similarly: $P(B|A) = \\frac{P(A \\cap B)}{P(A)} \\implies P(A \\cap B) = P(B|A) P(A)$.",
@@ -1045,7 +1058,7 @@
         desc: "Variance of sum of two independent random variables equals sum of individual variances.",
         surface3d: "gaussian",
         proof: {
-          summary: "Definition of variance using expectation operator $\\mathbb{E}$.",
+          summary: "For independent random variables with finite variances, expand the centered square; independence makes the covariance term zero.",
           steps: [
             "$\\text{Var}(X+Y) = \\mathbb{E}[(X+Y - (\\mu_X + \\mu_Y))^2] = \\mathbb{E}[((X - \\mu_X) + (Y - \\mu_Y))^2]$.",
             "Expand square: $=\\mathbb{E}[(X - \\mu_X)^2 + (Y - \\mu_Y)^2 + 2(X - \\mu_X)(Y - \\mu_Y)]$.",
@@ -1080,7 +1093,7 @@
         title: "Normal Distribution Normalization",
         category: "Probability & Statistics",
         latex: "f(x) = \\frac{1}{\\sigma \\sqrt{2\\pi}} e^{-\\frac{1}{2}\\left(\\frac{x-\\mu}{\\sigma}\\right)^2}",
-        desc: "Probability density function of standard normal Gaussian bell curve.",
+        desc: "Normal probability density with mean $\\mu$ and standard deviation $\\sigma>0$.",
         surface3d: "gaussian",
         proof: {
           summary: "Substitution of variable onto standard Gaussian integral $\\int e^{-u^2} du = \\sqrt{\\pi}$.",
@@ -1106,7 +1119,7 @@
         proof: {
           summary: "Eliminating time variable $t$ between $v = u + at$ and $s = ut + \\frac{1}{2}at^2$.",
           steps: [
-            "From $v = u + at$, solve for time: $t = \\frac{v - u}{a}$.",
+            "For constant acceleration with $a \\ne 0$, solve $v=u+at$ for time: $t=\\frac{v-u}{a}$. If $a=0$, velocity is constant and the stated identity reduces to $v^2=u^2$.",
             "Substitute $t$ into displacement equation $s = u t + \\frac{1}{2} a t^2$.",
             "$s = u \\left(\\frac{v - u}{a}\\right) + \\frac{1}{2} a \\left(\\frac{v - u}{a}\\right)^2 = \\frac{uv - u^2}{a} + \\frac{v^2 - 2uv + u^2}{2a}$.",
             "Find common denominator $2a$: $s = \\frac{2uv - 2u^2 + v^2 - 2uv + u^2}{2a} = \\frac{v^2 - u^2}{2a}$.",
@@ -1126,7 +1139,7 @@
           summary: "Differentiation of linear momentum $\\mathbf{p} = m\\mathbf{v}$.",
           steps: [
             "Linear momentum is defined as $\\mathbf{p} = m\\mathbf{v}$.",
-            "Applied force is rate of momentum change: \\mathbf{F} = \\frac{d\\mathbf{p}}{dt} = \\frac{d}{dt}(m\\mathbf{v})$.",
+            "Applied force is the rate of momentum change: $\\mathbf{F} = \\frac{d\\mathbf{p}}{dt} = \\frac{d}{dt}(m\\mathbf{v})$.",
             "Apply Product Rule: $\\mathbf{F} = m \\frac{d\\mathbf{v}}{dt} + \\mathbf{v} \\frac{dm}{dt}$.",
             "For classical mechanics systems with constant mass ($\\frac{dm}{dt} = 0$), $\\mathbf{F} = m \\frac{d\\mathbf{v}}{dt} = m\\mathbf{a}$."
           ]
@@ -1161,9 +1174,9 @@
         proof: {
           summary: "Integration of work $W = \\int F dx$ using differential chain rule $v = \\frac{dx}{dt}$.",
           steps: [
-            "Work done $W = \\int_0^s F dx$. Substitute $F = m a = m \\frac{dv}{dt}$.",
-            "$W = \\int_0^s m \\frac{dv}{dt} dx = \\int_0^v m \\frac{dx}{dt} dv$.",
-            "Since velocity $v = \\frac{dx}{dt}$, integral becomes $W = \\int_0^v m v \\, dv$.",
+            "For constant mass, work is $W=\\int F\\,dx=\\int ma\\,dx$, with $a=\\frac{dv}{dt}$.",
+            "Using $dx=v\\,dt$, the differential work is $dW=m\\frac{dv}{dt}(v\\,dt)=mv\\,dv$.",
+            "For an object starting from rest, integrate: $W=\\int_0^v mv\\,dv$.",
             "Evaluate integral: $W = m \\left[ \\frac{v^2}{2} \\right]_0^v = \\frac{1}{2}mv^2$."
           ]
         },
@@ -1215,12 +1228,12 @@
         desc: "Relates quantum particle wavelength $\\lambda$ to its momentum $p$.",
         surface3d: "wave",
         proof: {
-          summary: "Equating Planck quantum photon energy $E = h\\nu$ with Einstein momentum $p = E/c$.",
+          summary: "For photons, the energy and momentum equations give $p=h/\\lambda$. de Broglie proposed the same relation for matter waves; that extension is a physical hypothesis supported by experiments, not a deduction from photon equations alone.",
           steps: [
-            "Planck photon quantum energy $E = h\\nu = \\frac{hc}{\\lambda}$.",
-            "Relativistic photon momentum $p = \\frac{E}{c}$.",
-            "Substitute $E = pc$ into Planck formula: $pc = \\frac{hc}{\\lambda}$.",
-            "Divide by $c$: $p = \\frac{h}{\\lambda} \\implies \\lambda = \\frac{h}{p}$."
+            "For a photon, $E=h\\nu=\\frac{hc}{\\lambda}$.",
+            "Photon momentum is $p=\\frac{E}{c}$, so $E=pc$.",
+            "Equating the expressions for energy gives $pc=\\frac{hc}{\\lambda}$.",
+            "Cancel $c$ to obtain $\\lambda=\\frac{h}{p}$. de Broglie hypothesized that this relation also applies to material particles; electron-diffraction experiments later supported it.",
           ]
         },
         history: { author: "Louis de Broglie", year: "1924", story: "Proposed in his PhD thesis, establishing quantum wave-particle duality confirmed by electron diffraction." }
@@ -1245,7 +1258,6 @@
         history: { author: "Christiaan Huygens", year: "1659", story: "Published in De Vi Centrifuga, crucial for Newton's inverse-square law gravitation proof." }
       }
     ];
-
     // TAB SWITCHING & UI NAVIGATION
     function switchTab(tabId) {
       activeTab = tabId;
@@ -1268,11 +1280,22 @@
         }
       });
 
+      document.querySelectorAll('[data-mobile-tab]').forEach(btn => {
+        const isActive = btn.dataset.mobileTab === tabId;
+        btn.classList.toggle('text-sky-400', isActive);
+        btn.classList.toggle('text-slate-400', !isActive);
+        if (isActive) btn.setAttribute('aria-current', 'page');
+        else btn.removeAttribute('aria-current');
+      });
+
       // Tab specific re-render triggers
       if (tabId === 'catalog') {
         renderCatalog();
       } else if (tabId === 'lab3d') {
-        setTimeout(init3DLab, 50);
+        setTimeout(() => {
+          init3DLab();
+          start3DAnimation();
+        }, 50);
       } else if (tabId === 'proofs') {
         renderProofSidebar();
         selectProof(currentProofId);
@@ -1313,6 +1336,17 @@
       renderCatalog();
     }
 
+    function resetCatalogFilters() {
+      clearSearch();
+      currentCategory = 'All';
+      if (showOnlyFavorites) {
+        showOnlyFavorites = false;
+        const btn = document.getElementById('favToggleBtn');
+        if (btn) btn.className = 'px-3 py-2 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-300 hover:text-amber-400 hover:border-amber-500/40 transition-all flex items-center gap-2 text-xs font-semibold';
+      }
+      filterCategory('All');
+    }
+
     // FAVORITES & BOOKMARKS
     function toggleFavoritesFilter() {
       showOnlyFavorites = !showOnlyFavorites;
@@ -1337,7 +1371,7 @@
         savedFavorites.push(id);
         showToast("Formula saved to bookmarks!", "success");
       }
-      localStorage.setItem('fe_saved_favs', JSON.stringify(savedFavorites));
+      persistSavedFavorites();
       updateFavCountBadge();
       renderCatalog();
     }
@@ -1365,7 +1399,10 @@
           const matchCat = f.category.toLowerCase().includes(searchQuery);
           const matchDesc = f.desc.toLowerCase().includes(searchQuery);
           const matchAuthor = f.history.author.toLowerCase().includes(searchQuery);
-          if (!matchTitle && !matchCat && !matchDesc && !matchAuthor) return false;
+          const matchHistory = f.history.story.toLowerCase().includes(searchQuery);
+          const matchSummary = f.proof.summary.toLowerCase().includes(searchQuery);
+          const matchSteps = f.proof.steps.some(step => step.toLowerCase().includes(searchQuery));
+          if (!matchTitle && !matchCat && !matchDesc && !matchAuthor && !matchHistory && !matchSummary && !matchSteps) return false;
         }
 
         return true;
@@ -1377,7 +1414,7 @@
             <i class="fa-solid fa-magnifying-glass text-3xl text-slate-500"></i>
             <h3 class="font-bold text-slate-300 text-base">No Matching Formulas Found</h3>
             <p class="text-xs text-slate-400">Try adjusting your search query, selecting 'All' categories, or clearing bookmarks filter.</p>
-            <button onclick="clearSearch(); filterCategory('All');" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold">Reset Filters</button>
+            <button onclick="resetCatalogFilters()" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold">Reset Filters</button>
           </div>
         `;
         return;
@@ -1528,11 +1565,20 @@
     }
 
     // HISTORICAL CHRONICLES RENDER ENGINE
+    function parseHistoryYear(value) {
+      const match = String(value).match(/(\d+)/);
+      if (!match) return Number.MAX_SAFE_INTEGER;
+      const year = Number(match[1]);
+      return /BCE/i.test(String(value)) ? -year : year;
+    }
     function renderTimeline() {
       const container = document.getElementById('timelineContainer');
       if (!container) return;
 
-      container.innerHTML = FORMULAS_DATABASE.map(item => `
+      const chronologicalItems = [...FORMULAS_DATABASE].sort((a, b) =>
+        parseHistoryYear(a.history.year) - parseHistoryYear(b.history.year)
+      );
+      container.innerHTML = chronologicalItems.map(item => `
         <div id="hist-${item.id}" class="relative group">
           <!-- Timeline Node Marker -->
           <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-amber-500 border-4 border-slate-950 shadow-lg group-hover:scale-125 transition-transform"></div>
@@ -1579,6 +1625,8 @@
     function openQuizModal() {
       const modal = document.getElementById('quizModal');
       if (modal) modal.classList.remove('hidden');
+      const scoreText = document.getElementById('quizScoreText');
+      if (scoreText) scoreText.textContent = `Score: ${quizScore.correct} / ${quizScore.total}`;
       generateNextQuizQuestion();
     }
 
@@ -1595,11 +1643,16 @@
       const randomItem = FORMULAS_DATABASE[Math.floor(Math.random() * FORMULAS_DATABASE.length)];
       currentQuizItem = randomItem;
 
-      // Generate 3 random wrong options
-      let wrongItems = FORMULAS_DATABASE.filter(f => f.id !== randomItem.id);
-      wrongItems.sort(() => 0.5 - Math.random());
-      const choices = [randomItem, wrongItems[0], wrongItems[1], wrongItems[2]];
-      choices.sort(() => 0.5 - Math.random());
+      // Fisher–Yates shuffle gives each ordering an equal chance.
+      const shuffle = (items) => {
+        for (let i = items.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [items[i], items[j]] = [items[j], items[i]];
+        }
+        return items;
+      };
+      const wrongItems = shuffle(FORMULAS_DATABASE.filter(f => f.id !== randomItem.id));
+      const choices = shuffle([randomItem, ...wrongItems.slice(0, 3)]);
 
       quizContent.innerHTML = `
         <div class="space-y-4">
@@ -1610,7 +1663,7 @@
 
           <div class="space-y-2">
             ${choices.map((choice, idx) => `
-              <button onclick="checkQuizAnswer('${choice.id}', this)" class="quiz-option-btn w-full p-3 rounded-xl border border-slate-800 bg-slate-900/90 hover:border-sky-500/60 text-slate-200 text-xs font-mono-code text-left transition-all flex items-center justify-between">
+              <button data-formula-id="${choice.id}" onclick="checkQuizAnswer('${choice.id}', this)" class="quiz-option-btn w-full p-3 rounded-xl border border-slate-800 bg-slate-900/90 hover:border-sky-500/60 text-slate-200 text-xs font-mono-code text-left transition-all flex items-center justify-between">
                 <span>$$\\small ${choice.latex}$$</span>
                 <i class="fa-regular fa-circle text-slate-500 text-sm option-icon"></i>
               </button>
@@ -1630,8 +1683,9 @@
     }
 
     function checkQuizAnswer(selectedId, btnEl) {
+      if (!currentQuizItem || !btnEl || btnEl.disabled) return;
       const allBtns = document.querySelectorAll('.quiz-option-btn');
-      allBtns.forEach(btn => btn.disabled = true);
+      allBtns.forEach(btn => { btn.disabled = true; });
 
       quizScore.total++;
 
@@ -1643,14 +1697,19 @@
       } else {
         btnEl.className = "w-full p-3 rounded-xl border border-rose-500 bg-rose-500/20 text-rose-200 text-xs font-mono-code text-left transition-all flex items-center justify-between font-bold";
         btnEl.querySelector('.option-icon').className = "fa-solid fa-circle-xmark text-rose-400 text-base";
-        showToast("Incorrect formula selection", "error");
+        const correctBtn = document.querySelector(`.quiz-option-btn[data-formula-id="${currentQuizItem.id}"]`);
+        if (correctBtn) {
+          correctBtn.className = 'quiz-option-btn w-full p-3 rounded-xl border border-emerald-500 bg-emerald-500/10 text-emerald-200 text-xs font-mono-code text-left transition-all flex items-center justify-between';
+          const correctIcon = correctBtn.querySelector('.option-icon');
+          if (correctIcon) correctIcon.className = 'fa-solid fa-circle-check text-emerald-400 text-base option-icon';
+        }
+        showToast('Incorrect formula selection. The correct answer is highlighted.', 'error');
       }
 
       const scoreText = document.getElementById('quizScoreText');
       if (scoreText) scoreText.textContent = `Score: ${quizScore.correct} / ${quizScore.total}`;
-    }
-
-    // TOAST NOTIFICATION HELPER
+    }    // TOAST NOTIFICATION HELPER
+    let toastTimer = null;
     function showToast(msg, type = 'info') {
       const toast = document.getElementById('toast');
       const toastMsg = document.getElementById('toastMsg');
@@ -1670,14 +1729,19 @@
       toast.classList.remove('translate-y-20', 'opacity-0');
       toast.classList.add('translate-y-0', 'opacity-100');
 
-      setTimeout(() => {
+      if (toastTimer !== null) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
         toast.classList.remove('translate-y-0', 'opacity-100');
         toast.classList.add('translate-y-20', 'opacity-0');
+        toastTimer = null;
       }, 2600);
     }
 
     // INITIALIZATION ON DOM READY
     window.addEventListener('DOMContentLoaded', () => {
+      const validIds = new Set(FORMULAS_DATABASE.map(item => item.id));
+      savedFavorites = savedFavorites.filter(id => validIds.has(id));
+      persistSavedFavorites();
       updateFavCountBadge();
       renderCatalog();
 
@@ -1711,17 +1775,21 @@
     let previousMousePosition = { x: 0, y: 0 };
     let lastFpsTime = performance.now();
     let frameCount = 0;
+    let animationFrameId = null;
+    let resizeObserver = null;
+    let lastFrameTime = 0;
+    let activeTouchCount = 0;
 
     function init3DLab() {
       const canvas = document.getElementById('webgl-canvas');
-      if (!canvas) return;
+      if (!canvas || !window.THREE) return;
 
       const container = canvas.parentElement;
       const width = container.clientWidth;
       const height = container.clientHeight;
+      if (width <= 0 || height <= 0) return;
 
       if (renderer) {
-        // Handle canvas resize if already initialized
         renderer.setSize(width, height);
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
@@ -1736,96 +1804,110 @@
 
       renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
       renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
-      // Lights
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-      scene.add(ambientLight);
-
+      scene.add(new THREE.AmbientLight(0xffffff, 0.7));
       const dirLight1 = new THREE.DirectionalLight(0x38bdf8, 1.2);
       dirLight1.position.set(20, 30, 20);
       scene.add(dirLight1);
-
       const dirLight2 = new THREE.DirectionalLight(0xa855f7, 0.8);
       dirLight2.position.set(-20, -20, -10);
       scene.add(dirLight2);
 
-      // Attach mouse & touch event listeners for Orbit Interaction
       setupCameraInteractions(canvas);
 
-      // Window resize handler
-      window.addEventListener('resize', () => {
-        if (!renderer || activeTab !== 'lab3d') return;
-        const w = container.clientWidth;
-        const h = container.clientHeight;
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-        renderer.setSize(w, h);
-      });
+      if ('ResizeObserver' in window) {
+        resizeObserver = new ResizeObserver(() => resize3DLab());
+        resizeObserver.observe(container);
+      } else {
+        window.addEventListener('resize', resize3DLab, { passive: true });
+      }
 
+      document.addEventListener('visibilitychange', handleVisibilityChange);
       render3DSurface();
-      animate3D();
+      start3DAnimation();
+    }
+
+    function resize3DLab() {
+      if (!renderer || !camera) return;
+      const canvas = document.getElementById('webgl-canvas');
+      const container = canvas && canvas.parentElement;
+      if (!container) return;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      if (width <= 0 || height <= 0) return;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
     }
 
     function setupCameraInteractions(canvas) {
-      // Mouse down
+      canvas.style.touchAction = 'none';
       canvas.addEventListener('mousedown', (e) => {
         isDragging3D = true;
         previousMousePosition = { x: e.clientX, y: e.clientY };
       });
-
-      // Mouse move
       window.addEventListener('mousemove', (e) => {
-        if (!isDragging3D) return;
+        if (!isDragging3D || !camera) return;
         const deltaX = e.clientX - previousMousePosition.x;
         const deltaY = e.clientY - previousMousePosition.y;
-
         cameraTheta -= deltaX * 0.008;
-        cameraPhi -= deltaY * 0.008;
-
-        // Clamp phi to prevent flip
-        cameraPhi = Math.max(0.1, Math.min(Math.PI - 0.1, cameraPhi));
-
+        cameraPhi = Math.max(0.1, Math.min(Math.PI - 0.1, cameraPhi - deltaY * 0.008));
         updateCameraPosition();
         previousMousePosition = { x: e.clientX, y: e.clientY };
       });
-
-      // Mouse up
       window.addEventListener('mouseup', () => { isDragging3D = false; });
-
-      // Mouse wheel zoom
+      canvas.addEventListener('mouseleave', () => { isDragging3D = false; });
       canvas.addEventListener('wheel', (e) => {
         e.preventDefault();
-        cameraRadius += e.deltaY * 0.03;
-        cameraRadius = Math.max(10, Math.min(80, cameraRadius));
+        cameraRadius = Math.max(10, Math.min(80, cameraRadius + e.deltaY * 0.03));
         updateCameraPosition();
       }, { passive: false });
 
-      // Touch events for mobile
+      // One-finger rotate; two-finger pinch zoom.
+      let lastPinchDistance = null;
       canvas.addEventListener('touchstart', (e) => {
+        activeTouchCount = e.touches.length;
         if (e.touches.length === 1) {
           isDragging3D = true;
           previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+          lastPinchDistance = null;
+        } else if (e.touches.length === 2) {
+          isDragging3D = false;
+          lastPinchDistance = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
         }
-      });
-
+      }, { passive: true });
       canvas.addEventListener('touchmove', (e) => {
-        if (!isDragging3D || e.touches.length !== 1) return;
-        const deltaX = e.touches[0].clientX - previousMousePosition.x;
-        const deltaY = e.touches[0].clientY - previousMousePosition.y;
-
-        cameraTheta -= deltaX * 0.008;
-        cameraPhi -= deltaY * 0.008;
-        cameraPhi = Math.max(0.1, Math.min(Math.PI - 0.1, cameraPhi));
-
-        updateCameraPosition();
-        previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-      });
-
-      canvas.addEventListener('touchend', () => { isDragging3D = false; });
+        if (e.touches.length === 1 && isDragging3D) {
+          const deltaX = e.touches[0].clientX - previousMousePosition.x;
+          const deltaY = e.touches[0].clientY - previousMousePosition.y;
+          cameraTheta -= deltaX * 0.008;
+          cameraPhi = Math.max(0.1, Math.min(Math.PI - 0.1, cameraPhi - deltaY * 0.008));
+          updateCameraPosition();
+          previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        } else if (e.touches.length === 2) {
+          e.preventDefault();
+          const distance = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          if (lastPinchDistance !== null) {
+            cameraRadius = Math.max(10, Math.min(80, cameraRadius + (lastPinchDistance - distance) * 0.05));
+            updateCameraPosition();
+          }
+          lastPinchDistance = distance;
+        }
+      }, { passive: false });
+      const endTouch = () => { isDragging3D = false; activeTouchCount = 0; lastPinchDistance = null; };
+      canvas.addEventListener('touchend', endTouch, { passive: true });
+      canvas.addEventListener('touchcancel', endTouch, { passive: true });
     }
 
     function updateCameraPosition() {
+      if (!camera) return;
       camera.position.x = cameraRadius * Math.sin(cameraPhi) * Math.sin(cameraTheta);
       camera.position.y = cameraRadius * Math.cos(cameraPhi);
       camera.position.z = cameraRadius * Math.sin(cameraPhi) * Math.cos(cameraTheta);
@@ -1837,17 +1919,18 @@
       cameraTheta = 0.8;
       cameraPhi = 1.1;
       updateCameraPosition();
-      showToast("Camera reset to default perspective", "info");
+      showToast('Camera reset to default perspective', 'info');
     }
 
     function toggleAutoRotate3D() {
       autoRotate = !autoRotate;
       const btn = document.getElementById('autoRotateBtn');
       if (btn) {
-        btn.className = autoRotate 
-          ? "px-3 py-1.5 rounded-xl border border-sky-500/50 bg-sky-500/20 text-sky-300 font-semibold transition-all flex items-center gap-1.5"
-          : "px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-400 font-semibold transition-all flex items-center gap-1.5";
+        btn.className = autoRotate
+          ? 'px-3 py-1.5 rounded-xl border border-sky-500/50 bg-sky-500/20 text-sky-300 font-semibold transition-all flex items-center gap-1.5'
+          : 'px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-400 font-semibold transition-all flex items-center gap-1.5';
         btn.innerHTML = `<i class="fa-solid fa-rotate text-sky-400"></i> Auto-Rotate: ${autoRotate ? 'ON' : 'OFF'}`;
+        btn.setAttribute('aria-pressed', String(autoRotate));
       }
     }
 
@@ -1855,7 +1938,6 @@
       const fx = x * freqScale;
       const fy = y * freqScale;
       let z = 0;
-
       if (type === 'gaussian') {
         z = 7 * Math.exp(-0.06 * (fx * fx + fy * fy)) * Math.cos(t * 0.5);
       } else if (type === 'saddle') {
@@ -1878,26 +1960,20 @@
       } else if (type === 'mobius') {
         z = Math.cos(fx * 0.3 + t * 0.5) * Math.sin(fy * 0.3) * 3;
       }
-
       return z * heightScale;
     }
 
-    function getColormapRGB(normZ, theme) {
-      let r = 0, g = 0, b = 0;
+    function getColormapRGB(normZ, theme, target = {}) {
       const t = Math.max(0, Math.min(1, normZ));
-
+      let r = 0, g = 0, b = 0;
       if (theme === 'sky') {
-        r = 0.1 + 0.3 * t;
-        g = 0.5 + 0.5 * t;
-        b = 0.8 + 0.2 * t;
+        r = 0.1 + 0.3 * t; g = 0.5 + 0.5 * t; b = 0.8 + 0.2 * t;
       } else if (theme === 'fire') {
         r = Math.min(1, t * 1.5);
         g = Math.min(1, Math.max(0, (t - 0.3) * 1.5));
         b = Math.min(1, Math.max(0, (t - 0.7) * 2));
       } else if (theme === 'emerald') {
-        r = 0.05 + 0.2 * t;
-        g = 0.4 + 0.6 * t;
-        b = 0.3 + 0.5 * t;
+        r = 0.05 + 0.2 * t; g = 0.4 + 0.6 * t; b = 0.3 + 0.5 * t;
       } else if (theme === 'sunset') {
         r = 0.3 + 0.7 * t;
         g = 0.1 + 0.4 * (1 - Math.abs(t - 0.5) * 2);
@@ -1905,75 +1981,136 @@
       } else {
         r = g = b = 0.3 + 0.6 * t;
       }
+      target.r = r;
+      target.g = g;
+      target.b = b;
+      return target;
+    }
 
-      return new THREE.Color(r, g, b);
+    function disposeSurfaceObjects() {
+      const disposedGeometries = new Set();
+      const disposedMaterials = new Set();
+      [currentMesh, wireframeMesh].forEach((object) => {
+        if (!object) return;
+        if (object.geometry && !disposedGeometries.has(object.geometry)) {
+          object.geometry.dispose();
+          disposedGeometries.add(object.geometry);
+        }
+        const materials = Array.isArray(object.material) ? object.material : [object.material];
+        materials.forEach((material) => {
+          if (material && !disposedMaterials.has(material)) {
+            material.dispose();
+            disposedMaterials.add(material);
+          }
+        });
+        if (scene) scene.remove(object);
+      });
+      currentMesh = null;
+      wireframeMesh = null;
+    }
+
+    function createMobiusGeometry(segments = 70, widthSegments = 24) {
+      // A Möbius strip needs its width coordinate reversed at the seam.
+      const positions = [];
+      const indices = [];
+      const radius = 6 / freqScale;
+      const halfWidth = 1.8 / freqScale;
+      const rowSize = widthSegments + 1;
+      for (let i = 0; i < segments; i++) {
+        const t = (i / segments) * Math.PI * 2;
+        for (let j = 0; j <= widthSegments; j++) {
+          const w = ((j / widthSegments) * 2 - 1) * halfWidth;
+          const radial = radius + w * Math.cos(t / 2);
+          positions.push(radial * Math.cos(t), radial * Math.sin(t), w * Math.sin(t / 2));
+        }
+      }
+      for (let i = 0; i < segments; i++) {
+        const nextI = (i + 1) % segments;
+        for (let j = 0; j < widthSegments; j++) {
+          const a = i * rowSize + j;
+          const c = a + 1;
+          let b, d;
+          if (i === segments - 1) {
+            b = nextI * rowSize + (widthSegments - j);
+            d = nextI * rowSize + (widthSegments - j - 1);
+          } else {
+            b = nextI * rowSize + j;
+            d = b + 1;
+          }
+          indices.push(a, b, c, c, b, d);
+        }
+      }
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      geometry.setIndex(indices);
+      geometry.computeVertexNormals();
+      return geometry;
     }
 
     function render3DSurface() {
-      if (!scene) return;
+      if (!scene || !window.THREE) return;
+      const surfaceSelect = document.getElementById('surfaceSelect');
+      if (!surfaceSelect) return;
+      const type = surfaceSelect.value;
+      disposeSurfaceObjects();
 
-      if (currentMesh) scene.remove(currentMesh);
-      if (wireframeMesh) scene.remove(wireframeMesh);
+      // True parametric surfaces for the torus and Möbius strip.
+      let geometry;
+      if (type === 'torus') {
+        geometry = new THREE.TorusGeometry(6.5 / freqScale, 2.2 / freqScale, Math.max(12, gridDensity), gridDensity * 2);
+      } else if (type === 'mobius') {
+        geometry = createMobiusGeometry(gridDensity, Math.max(12, Math.floor(gridDensity * 0.35)));
+      } else {
+        geometry = new THREE.PlaneGeometry(24, 24, gridDensity, gridDensity);
+        const pos = geometry.attributes.position;
+        for (let i = 0; i < pos.count; i++) {
+          pos.setZ(i, getSurfaceZ(type, pos.getX(i), pos.getY(i), timeFactor));
+        }
+      }
 
-      const type = document.getElementById('surfaceSelect').value;
-      const geometry = new THREE.PlaneGeometry(24, 24, gridDensity, gridDensity);
-      const pos = geometry.attributes.position;
-
-      // Titles & Equations
       const titleEl = document.getElementById('visModelTitle');
       const eqEl = document.getElementById('visModelEq');
-
       const surfaceMeta = {
-        gaussian: { title: "3D Gaussian Bell Surface", eq: "z = A * exp(-k*(x² + y²))" },
-        saddle: { title: "Hyperbolic Paraboloid (Saddle Surface)", eq: "z = (x² - y²) / k" },
-        wave: { title: "2D Quantum Wave Interference", eq: "z = A * sin(x + t) * cos(y + t)" },
-        sombrero: { title: "Sombrero (Bessel Ripple Wave)", eq: "z = A * sin(r - t) / r" },
-        monkeysaddle: { title: "Monkey Saddle Surface", eq: "z = x³ - 3xy²" },
-        blackhole: { title: "Schwarzschild Spacetime Well", eq: "z = -k / (sqrt(x² + y²) + r₀)" },
-        torus: { title: "Riemannian 3D Wave Torus", eq: "z = A * sin(r - t)" },
-        mobius: { title: "3D Mobius Topological Surface", eq: "z = cos(x/2 + t) * sin(y)" }
+        gaussian: { title: '3D Gaussian Bell Surface', eq: 'z = A exp(-k(x² + y²))' },
+        saddle: { title: 'Hyperbolic Paraboloid (Saddle Surface)', eq: 'z = k(x² - y²)' },
+        wave: { title: '2D Wave Interference Surface', eq: 'z = A sin(x + t) cos(y + t)' },
+        sombrero: { title: 'Radial Sinc-Like Ripple Surface', eq: 'z = A sin(r - t) / r' },
+        monkeysaddle: { title: 'Monkey Saddle Surface', eq: 'z = x³ - 3xy²' },
+        blackhole: { title: 'Illustrative Radial Potential Well', eq: 'z = -k / (r + r₀)' },
+        torus: { title: 'Parametric Torus', eq: 'x = (R + r cos v) cos u; y = (R + r cos v) sin u; z = r sin v' },
+        mobius: { title: 'Parametric Möbius Strip', eq: 'A one-sided strip with a half twist' }
       };
-
       if (surfaceMeta[type]) {
-        titleEl.textContent = surfaceMeta[type].title;
-        eqEl.textContent = surfaceMeta[type].eq;
+        if (titleEl) titleEl.textContent = surfaceMeta[type].title;
+        if (eqEl) eqEl.textContent = surfaceMeta[type].eq;
       }
 
-      // Compute Heights & Colors
-      const colors = [];
+      if (type !== 'torus' && type !== 'mobius') {
+        geometry.computeVertexNormals();
+      }
+      const pos = geometry.attributes.position;
+      const zValues = [];
       let minZ = Infinity, maxZ = -Infinity;
-
-      for (let i = 0; i < pos.count; i++) {
-        const x = pos.getX(i);
-        const y = pos.getY(i);
-        const z = getSurfaceZ(type, x, y, timeFactor);
-        pos.setZ(i, z);
-
-        if (z < minZ) minZ = z;
-        if (z > maxZ) maxZ = z;
-      }
-
-      const zRange = maxZ - minZ || 1;
-
       for (let i = 0; i < pos.count; i++) {
         const z = pos.getZ(i);
-        const normZ = (z - minZ) / zRange;
-        const col = getColormapRGB(normZ, colorTheme);
+        zValues.push(z);
+        minZ = Math.min(minZ, z);
+        maxZ = Math.max(maxZ, z);
+      }
+      const range = maxZ - minZ || 1;
+      const colors = [];
+      const colorScratch = {};
+      for (const z of zValues) {
+        const col = getColormapRGB((z - minZ) / range, colorTheme, colorScratch);
         colors.push(col.r, col.g, col.b);
       }
-
       geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-      geometry.computeVertexNormals();
 
-      // Display mode construction
+      const isParametric = type === 'torus' || type === 'mobius';
       if (displayMode === 'points') {
-        const pMaterial = new THREE.PointsMaterial({
-          size: 0.25,
-          vertexColors: true,
-          transparent: true,
-          opacity: 0.9
-        });
-        currentMesh = new THREE.Points(geometry, pMaterial);
+        currentMesh = new THREE.Points(geometry, new THREE.PointsMaterial({
+          size: 0.25, vertexColors: true, transparent: true, opacity: 0.9
+        }));
       } else {
         const meshMaterial = new THREE.MeshPhongMaterial({
           vertexColors: true,
@@ -1982,70 +2119,73 @@
           wireframe: displayMode === 'wireframe'
         });
         currentMesh = new THREE.Mesh(geometry, meshMaterial);
-
         if (displayMode === 'wireframe_solid') {
-          const wireMat = new THREE.MeshBasicMaterial({
-            color: 0xffffff,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.15
-          });
-          wireframeMesh = new THREE.Mesh(geometry, wireMat);
-          wireframeMesh.rotation.x = -Math.PI / 2;
+          wireframeMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+            color: 0xffffff, wireframe: true, transparent: true, opacity: 0.15,
+            side: THREE.DoubleSide
+          }));
           scene.add(wireframeMesh);
         }
       }
-
-      currentMesh.rotation.x = -Math.PI / 2;
+      currentMesh.rotation.x = isParametric ? Math.PI / 2 : -Math.PI / 2;
+      if (isParametric) currentMesh.scale.z = heightScale;
+      if (wireframeMesh) wireframeMesh.rotation.x = isParametric ? Math.PI / 2 : -Math.PI / 2;
+      if (wireframeMesh && isParametric) wireframeMesh.scale.z = heightScale;
       scene.add(currentMesh);
     }
 
-    function update3DTheme(val) {
-      colorTheme = val;
-      render3DSurface();
-    }
-
-    function updateDisplayMode(val) {
-      displayMode = val;
-      render3DSurface();
-    }
-
+    function update3DTheme(val) { colorTheme = val; render3DSurface(); }
+    function updateDisplayMode(val) { displayMode = val; render3DSurface(); }
     function handleAmpChange(val) {
       heightScale = parseFloat(val);
-      document.getElementById('ampVal').textContent = `${heightScale.toFixed(1)}x`;
+      const label = document.getElementById('ampVal');
+      if (label) label.textContent = `${heightScale.toFixed(1)}x`;
       render3DSurface();
     }
-
     function handleFreqChange(val) {
       freqScale = parseFloat(val);
-      document.getElementById('freqVal').textContent = `${freqScale.toFixed(1)}x`;
+      const label = document.getElementById('freqVal');
+      if (label) label.textContent = `${freqScale.toFixed(1)}x`;
       render3DSurface();
     }
-
     function handleSpeedChange(val) {
       animSpeed = parseFloat(val);
-      document.getElementById('speedVal').textContent = `${animSpeed.toFixed(1)}x`;
+      const label = document.getElementById('speedVal');
+      if (label) label.textContent = `${animSpeed.toFixed(1)}x`;
     }
-
     function setGridRes(density) {
       gridDensity = density;
       document.querySelectorAll('.res-btn').forEach(btn => {
-        if (parseInt(btn.dataset.res) === density) {
-          btn.className = "res-btn active-res py-1 rounded-lg border border-sky-500 bg-sky-600/30 text-sky-300 font-bold text-[11px]";
-        } else {
-          btn.className = "res-btn py-1 rounded-lg border border-slate-700 bg-slate-900 text-slate-300 text-[11px]";
-        }
+        const selected = parseInt(btn.dataset.res, 10) === density;
+        btn.className = selected
+          ? 'res-btn active-res py-1 rounded-lg border border-sky-500 bg-sky-600/30 text-sky-300 font-bold text-[11px]'
+          : 'res-btn py-1 rounded-lg border border-slate-700 bg-slate-900 text-slate-300 text-[11px]';
+        btn.setAttribute('aria-pressed', String(selected));
       });
       render3DSurface();
     }
 
-    function animate3D() {
-      requestAnimationFrame(animate3D);
-      if (activeTab !== 'lab3d') return;
+    function handleVisibilityChange() {
+      if (document.hidden) {
+        if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      } else if (activeTab === 'lab3d') {
+        start3DAnimation();
+      }
+    }
+    function start3DAnimation() {
+      if (animationFrameId !== null || document.hidden) return;
+      lastFrameTime = performance.now();
+      animationFrameId = requestAnimationFrame(animate3D);
+    }
+    function animate3D(now = performance.now()) {
+      animationFrameId = null;
+      if (document.hidden) return;
+      if (activeTab !== 'lab3d' || !renderer || !scene || !camera) return;
+      const delta = Math.min((now - (lastFrameTime || now)) / 1000, 0.05);
+      lastFrameTime = now;
 
-      // Update FPS counter
       frameCount++;
-      const now = performance.now();
       if (now - lastFpsTime >= 1000) {
         const fpsBadge = document.getElementById('fpsBadge');
         if (fpsBadge) fpsBadge.textContent = `${frameCount} FPS`;
@@ -2053,56 +2193,50 @@
         lastFpsTime = now;
       }
 
-      // Auto rotation
       if (autoRotate && !isDragging3D) {
-        cameraTheta += 0.003;
+        cameraTheta += 0.18 * delta;
         updateCameraPosition();
       }
 
-      // Dynamic surface animation if speed > 0
       if (animSpeed > 0 && currentMesh) {
-        timeFactor += 0.02 * animSpeed;
-        const type = document.getElementById('surfaceSelect').value;
-
+        timeFactor += delta * animSpeed;
+        const type = document.getElementById('surfaceSelect')?.value;
         if (['gaussian', 'wave', 'sombrero', 'torus', 'mobius'].includes(type)) {
-          const pos = currentMesh.geometry.attributes.position;
-          const colAttr = currentMesh.geometry.attributes.color;
-          let minZ = Infinity, maxZ = -Infinity;
-
-          for (let i = 0; i < pos.count; i++) {
-            const x = pos.getX(i);
-            const y = pos.getY(i);
-            const z = getSurfaceZ(type, x, y, timeFactor);
-            pos.setZ(i, z);
-
-            if (z < minZ) minZ = z;
-            if (z > maxZ) maxZ = z;
-          }
-
-          const zRange = maxZ - minZ || 1;
-          const colors = colAttr.array;
-
-          for (let i = 0; i < pos.count; i++) {
-            const z = pos.getZ(i);
-            const normZ = (z - minZ) / zRange;
-            const col = getColormapRGB(normZ, colorTheme);
-            colors[i * 3] = col.r;
-            colors[i * 3 + 1] = col.g;
-            colors[i * 3 + 2] = col.b;
-          }
-
-          pos.needsUpdate = true;
-          colAttr.needsUpdate = true;
-          currentMesh.geometry.computeVertexNormals();
-
-          if (wireframeMesh) {
-            wireframeMesh.geometry.attributes.position.needsUpdate = true;
+          const geometry = currentMesh.geometry;
+          const pos = geometry.attributes.position;
+          const colAttr = geometry.attributes.color;
+          if (type === 'torus' || type === 'mobius') {
+            // The parametrised geometry is static; rotate it gently rather than deforming it as a height field.
+            currentMesh.rotation.z += delta * animSpeed * 0.25;
+            if (wireframeMesh) wireframeMesh.rotation.z = currentMesh.rotation.z;
+          } else {
+            let minZ = Infinity, maxZ = -Infinity;
+            for (let i = 0; i < pos.count; i++) {
+              const x = pos.getX(i), y = pos.getY(i);
+              const z = getSurfaceZ(type, x, y, timeFactor);
+              pos.setZ(i, z);
+              minZ = Math.min(minZ, z);
+              maxZ = Math.max(maxZ, z);
+            }
+            const zRange = maxZ - minZ || 1;
+            const colors = colAttr.array;
+            const colorScratch = {};
+            for (let i = 0; i < pos.count; i++) {
+              const col = getColormapRGB((pos.getZ(i) - minZ) / zRange, colorTheme, colorScratch);
+              colors[i * 3] = col.r;
+              colors[i * 3 + 1] = col.g;
+              colors[i * 3 + 2] = col.b;
+            }
+            pos.needsUpdate = true;
+            colAttr.needsUpdate = true;
+            geometry.computeVertexNormals();
           }
         }
       }
-
       renderer.render(scene, camera);
+      animationFrameId = requestAnimationFrame(animate3D);
     }
+
   </script>
 </body>
 </html>
